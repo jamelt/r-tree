@@ -1,6 +1,6 @@
-import { Region } from './region';
+import { RegionData } from './region-data';
 
 export interface Shape {
 
-  region: Region;
+  region: RegionData;
 }

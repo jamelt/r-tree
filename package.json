@@ -23,6 +23,11 @@
     "type": "git",
     "url": "https://github.com/jamelt/r-tree"
   },
+  "scripts": {
+    "clean": "rm -rf dist/*",
+    "build": "npx tsc",
+    "watch": "npx tsc -w"
+  },
   "devDependencies": {
     "@types/jest": "^23.3.5",
     "jest": "^23.6.0",

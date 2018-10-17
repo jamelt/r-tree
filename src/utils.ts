@@ -9,3 +9,9 @@ export function isNil(value: any): boolean {
 export function error(message: string): never {
   throw new Error(message);
 }
+
+export function assert(condition: boolean, message?: string) {
+  if (condition) return;
+  if (message === undefined) message = 'Assertion failed';
+  throw new Error(message);
+}
