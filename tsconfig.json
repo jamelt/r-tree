@@ -3,9 +3,13 @@
   "compilerOptions": {
     "sourceMap": true,
     "removeComments": true,
-    "noImplicitAny": true,
     "module": "commonjs",
-    "outDir": "dist/"
+    "outDir": "dist/",
+    "forceConsistentCasingInFileNames": true,
+    "noImplicitReturns": true,
+    "strict": true,
+    "noUnusedLocals": true,
+    "declaration": true
   },
   "include": ["src/**/*"],
   "exclude": ["**/*.test.ts", "**/*.fixture.ts"]

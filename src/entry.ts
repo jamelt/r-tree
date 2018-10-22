@@ -1,4 +1,4 @@
-import { Id } from './r-tree';
+import { Data, Id } from './r-tree-interface';
 import { Region } from './region';
 import { Node } from './node';
 import { Entry } from './entry';
@@ -9,6 +9,7 @@ export interface Entry {
 
 export interface LeafEntry extends Entry {
   id: Id;
+  data: Data; // TODO Do I need this?
 }
 
 export interface BranchEntry extends Entry {
