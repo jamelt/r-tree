@@ -9,7 +9,7 @@ export interface Entry {
 
 export interface LeafEntry extends Entry {
   id: Id;
-  data: Data; // TODO Do I need this?
+  // data: Data; // TODO Do I need this?
 }
 
 export interface BranchEntry extends Entry {

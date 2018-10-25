@@ -4,11 +4,12 @@ import { Region } from './region';
 import { RegionData } from './region-data';
 
 export function chooseLeaf(node: Node, entry: LeafEntry): Node {
-  if (node.leaf) return node;
-  else {
-    const entry = leastEnlargement(node.entries, entry);
+  if (node.leaf) {
+    return node;
+  } else {
+    let branchEntry = leastEnlargement(node.entries, entry);
+    chooseLeaf(branchEntry.child, entry);
   }
-
 }
 
 function leastEnlargement(entries: BranchEntry[], ref: LeafEntry): BranchEntry {
@@ -40,5 +41,3 @@ function enlarge(regionX: RegionData, regionY: RegionData): RegionData {
   }
   return enlargement;
 }
-
-// function chooseLeafRecursive
