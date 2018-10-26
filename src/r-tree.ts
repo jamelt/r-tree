@@ -1,30 +1,26 @@
 import { chooseLeaf } from './choose-leaf';
+import { Id } from './data-types';
+import { leafNode } from './leaf-node';
 import { Node } from './node';
-import { RTreeInterface } from './r-tree-interface';
 import { Region } from './region';
-import { RegionData } from './region-data';
+import { defaultSpec, Spec } from './spec';
+import { isNil, mixinDeep } from './utils';
 
-export type Id = any;
-export type Data = any;
-
-export class RTree implements RTreeInterface {
-  root: Node;
-
-  constructor() {
-    this.root = {
-      entries: [],
-      leaf: true,
-      branch: false,
-      root: true
-    };
-  }
-
-  insert(id: Id, regionData: RegionData) {
-    const region = new Region(regionData);
-    const leaf = chooseLeaf(this.root, { id, region });
-
-
-  }
+export default function(spec: Spec) {
+  return new RTree(
+    isNil(spec) ? defaultSpec() : mixinDeep(defaultSpec(), spec)
+  );
 }
 
-export default RTree;
+export class RTree {
+  root: Node;
+
+  constructor(spec: Spec) {
+    this.root = leafNode();
+    this.root.root = true;
+  }
+
+  insert(id: Id, region: Region) {
+    const leaf = chooseLeaf(this.root, { id, region });
+  }
+}

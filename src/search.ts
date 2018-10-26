@@ -1,37 +1,44 @@
-import { BranchEntry, Entry, LeafEntry } from './entry';
+import { BranchEntry } from './branch-entry';
+import { BranchNode } from './branch-node';
+import { Id } from './data-types';
+import { Entry } from './entry';
+import { LeafEntry } from './leaf-entry';
+import { LeafNode } from './leaf-node';
 import { Node } from './node';
-import { Id } from './r-tree';
-import { RegionData } from './region-data';
+import { Region } from './region';
 
-export function search(node: Node, region: RegionData): Id[] {
+export function search(node: Node, region: Region): Id[] {
   return [...searchRecursive(node, region)];
 }
 
-function searchRecursive(node: Node, region: RegionData): Id[] {
+function searchRecursive(node: Node, region: Region): Id[] {
   if (node.branch) {
-    return [
-      ...branchesOverlappingChildren(node, region).map(node =>
-        searchRecursive(node, region)
-      )
-    ];
+    const branch = <BranchNode>node;
+    const children = findChildNodesOverlappingRegion(branch, region);
+    const searchResults = children.map(node => searchRecursive(node, region));
+    return [...searchResults];
   } else {
-    return [...leafsOverlappingIds(node, region)];
+    const leaf = <LeafNode>node;
+    return [...findIdsOverlappingRegion(leaf, region)];
   }
 }
 
-function branchesOverlappingChildren(branch: Node, region: RegionData): Node[] {
-  return overlaps<BranchEntry>(branch, region).map(entry => entry.child);
-}
-
-function leafsOverlappingIds(leaf: Node, region: RegionData): Id[] {
-  return overlaps<LeafEntry>(leaf, region).map(entry => entry.id);
-}
-
-function overlaps<EntryType extends Entry>(
-  node: Node,
-  region: RegionData
-): EntryType[] {
-  return (node.entries as EntryType[]).filter(entry =>
-    entry.region.overlaps(region)
+function findChildNodesOverlappingRegion(branch: Node, region: Region): Node[] {
+  return nodeEntriesOverlapping<BranchEntry>(branch, region).map(
+    entry => entry.child
   );
+}
+
+function findIdsOverlappingRegion(leaf: Node, region: Region): Id[] {
+  return nodeEntriesOverlapping<LeafEntry>(leaf, region).map(
+    entry => entry.id
+  );
+}
+
+function nodeEntriesOverlapping<EntryType extends Entry>(
+  node: Node,
+  region: Region
+): EntryType[] {
+  const entries = <EntryType[]>node.entries;
+  return entries.filter(entry => entry.region.overlaps(region));
 }

@@ -1,51 +1,56 @@
-import { RegionData } from './region-data';
 import { assert } from './utils';
 
-export class Region implements RegionData {
+export interface Region {
   min: number[];
   max: number[];
+}
 
-  constructor(regionData: RegionData) {
-    this.max = regionData.max;
-    this.min = regionData.min;
-  }
-
-  static assertSameDimensions(x: RegionData, y: RegionData): number {
+export function assertSameDimensions(x: Region, y?: Region): number {
+  if (y === undefined) {
     assert(
-      x.min.length === y.min.length &&
+      x.min.length === x.max.length,
+      'Region must have same min and max length'
+    );
+  } else {
+    assert(
       x.min.length === x.max.length &&
-      y.min.length === y.max.length,
+        x.min.length === y.min.length &&
+        x.min.length === x.max.length,
       'Regions must have same dimensions.'
     );
-    return x.min.length;
   }
+  return x.min.length;
+}
 
-  static area(region: RegionData): number {
-    let area = 1.0;
-    for (let i = 0; i < Region.dimensions(region); i++)
-      area *= region.max[i] - region.min[i];
-    return area;
-  }
+export function area(region: Region): number {
+  let area = 1.0;
+  for (let i = 0; i < dimensions(region); i++)
+    area *= region.max[i] - region.min[i];
+  return area;
+}
 
-  static dimensions(region: RegionData) {
-    return region.min.length;
-  }
+export function dimensions(region: Region) {
+  assertSameDimensions(region);
+  return region.min.length;
+}
 
-  overlaps(region: RegionData): boolean {
-    Region.assertSameDimensions(this, region);
-    for (let i = 0; i < this.min.length; i++)
-      if (this.min[i] > region.max[i] || this.max[i] < region.min[i])
-        return false;
-    return true;
-  }
+export function overlaps(x: Region, y: Region): boolean {
+  const dimensions = assertSameDimensions(x, y);
+  for (let i = 0; i < dimensions; i++)
+    if (x.min[i] > y.max[i] || x.max[i] < y.min[i]) return false;
+  return true;
+}
 
-  enlarge(region: RegionData): RegionData {
-    const dimensions = Region.assertSameDimensions(this, region);
-    let enlargement: RegionData = { min: [], max: [] };
-    for (let i = 0; i < dimensions; i++) {
-      enlargement.min.push(Math.min(this.min[i], region.min[i]));
-      enlargement.max.push(Math.max(this.max[i], region.max[i]));
-    }
-    return enlargement;
+export function region() {
+  return { min: [], max: [] };
+}
+
+export function enlarge(x: Region, y: Region): Region {
+  const dimensions = assertSameDimensions(x, y);
+  let enlargement: Region = region();
+  for (let i = 0; i < dimensions; i++) {
+    enlargement.min.push(Math.min(x.min[i], y.min[i]));
+    enlargement.max.push(Math.max(x.max[i], y.max[i]));
   }
+  return enlargement;
 }
