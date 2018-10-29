@@ -1,4 +1,3 @@
-import { chooseLeaf } from './choose-leaf';
 import { Id } from './data-types';
 import { leafNode } from './leaf-node';
 import { Node } from './node';
@@ -6,21 +5,21 @@ import { Region } from './region';
 import { defaultSpec, Spec } from './spec';
 import { isNil, mixinDeep } from './utils';
 
-export default function(spec: Spec) {
-  return new RTree(
-    isNil(spec) ? defaultSpec() : mixinDeep(defaultSpec(), spec)
-  );
+export default function(userSpec: Spec): RTree {
+  let spec: Spec = userSpec;
+  let root: Node = leafNode();
+
+  isNil(spec) ? defaultSpec() : mixinDeep(defaultSpec(), spec);
+
+  function insert(id: Id, region: Region) {}
+
+  return {
+    root,
+    insert
+  };
 }
 
-export class RTree {
+export interface RTree {
   root: Node;
-
-  constructor(spec: Spec) {
-    this.root = leafNode();
-    this.root.root = true;
-  }
-
-  insert(id: Id, region: Region) {
-    const leaf = chooseLeaf(this.root, { id, region });
-  }
+  insert(id: Id, region: Region): void;
 }
