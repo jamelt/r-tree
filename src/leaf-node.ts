@@ -1,3 +1,4 @@
+import { NullEntry } from './data-types';
 import { LeafEntry } from './leaf-entry';
 import { Node } from './node';
 
@@ -7,11 +8,11 @@ export interface LeafNode extends Node {
   branch: false;
 }
 
-export function leafNode(): LeafNode {
+export function createLeafNode(): LeafNode {
   return {
-    entries: Array<LeafEntry>(),
+    parent: NullEntry,
+    entries: [],
     leaf: true,
     branch: false,
-    root: false
   };
 }

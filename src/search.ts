@@ -5,7 +5,7 @@ import { Entry } from './entry';
 import { LeafEntry } from './leaf-entry';
 import { LeafNode } from './leaf-node';
 import { Node } from './node';
-import { Region } from './region';
+import { overlaps, Region } from './region';
 
 export function search(node: Node, region: Region): Id[] {
   return [...searchRecursive(node, region)];
@@ -14,16 +14,16 @@ export function search(node: Node, region: Region): Id[] {
 function searchRecursive(node: Node, region: Region): Id[] {
   if (node.branch) {
     const branch = <BranchNode>node;
-    const children = findChildNodesOverlappingRegion(branch, region);
-    const searchResults = children.map(node => searchRecursive(node, region));
-    return [...searchResults];
+    const children = findChildrenOverlappingRegion(branch, region);
+    const results = children.map(node => searchRecursive(node, region));
+    return [...results];
   } else {
     const leaf = <LeafNode>node;
     return [...findIdsOverlappingRegion(leaf, region)];
   }
 }
 
-function findChildNodesOverlappingRegion(branch: Node, region: Region): Node[] {
+function findChildrenOverlappingRegion(branch: Node, region: Region): Node[] {
   return nodeEntriesOverlapping<BranchEntry>(branch, region).map(
     entry => entry.child
   );
@@ -40,5 +40,5 @@ function nodeEntriesOverlapping<EntryType extends Entry>(
   region: Region
 ): EntryType[] {
   const entries = <EntryType[]>node.entries;
-  return entries.filter(entry => entry.region.overlaps(region));
+  return entries.filter(entry => overlaps(entry.region, region));
 }

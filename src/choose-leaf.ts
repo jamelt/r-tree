@@ -10,8 +10,8 @@ export function chooseLeaf(node: Node, ref: LeafEntry): LeafNode {
     return <LeafNode>node;
   } else {
     const branch = <BranchNode>node;
-    const branchEntry = leastEnlargement(branch.entries, ref);
-    return chooseLeaf(branchEntry.child, ref);
+    const entry = leastEnlargement(branch.entries, ref);
+    return chooseLeaf(entry.child, ref);
   }
 }
 

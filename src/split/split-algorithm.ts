@@ -1,8 +1,9 @@
 import { Entry } from '../entry';
 import { Seeds } from './seeds';
+import { Split } from './split';
 import { SplitAssignment } from './split-assignment';
 
 export interface SplitAlgorithm {
-  pickNext(remaining: Entry[], groupA: Node, groupB: Node): SplitAssignment;
+  pickNext(remaining: Entry[], split: Split): SplitAssignment;
   pickSeeds(remaining: Entry[]): Seeds;
 }

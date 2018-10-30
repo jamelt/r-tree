@@ -54,3 +54,7 @@ export function enlarge(x: Region, y: Region): Region {
   }
   return enlargement;
 }
+
+export function emptyRegion(): Region {
+  return { min: [], max: [] };
+}
