@@ -1,33 +1,33 @@
-import { BranchNode } from './node/branch-node';
-import { BranchEntry } from './entry/branch-entry';
+import { Entry } from './entry/entry';
 import { LeafEntry } from './entry/leaf-entry';
 import { LeafNode } from './node/leaf-node';
 import { Node } from './node/node';
 import { area, enlarge } from './region';
+import { error } from './utils';
 
 export function chooseLeaf(node: Node, ref: LeafEntry): LeafNode {
-  if (node.leaf) {
-    return <LeafNode>node;
-  } else {
-    const branch = <BranchNode>node;
-    const entry = leastEnlargement(branch.entries, ref);
-    return chooseLeaf(entry.child, ref);
-  }
+  if (node.leaf) return <LeafNode>node;
+
+  const entry = leastEnlargement(node.entries, ref);
+
+  if (!entry.child) throw error('entry missing child');
+
+  return chooseLeaf(entry.child, ref);
 }
 
-function leastEnlargement(entries: BranchEntry[], ref: LeafEntry): BranchEntry {
-  let least: BranchEntry = entries[0];
-  let enlargement = Number.MAX_VALUE;
+function leastEnlargement(entries: Entry[], ref: LeafEntry): Entry {
+  let least = entries[0];
+  let growth = Number.MAX_VALUE;
 
   entries.forEach(entry => {
-    let combinedArea = area(enlarge(ref.region, entry.region));
-    let enlarged = area(ref.region) - combinedArea;
+    let combined = area(enlarge(ref.region, entry.region));
+    let diff = area(ref.region) - combined;
 
-    if (enlarged < enlargement) {
-      enlargement = enlarged;
+    if (diff < growth) {
+      growth = diff;
       least = entry;
-    } else if (enlarged === enlargement) {
-      if (combinedArea < area(least.region)) least = entry;
+    } else if (diff === growth) {
+      if (combined < area(least.region)) least = entry;
     }
   });
 

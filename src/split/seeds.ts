@@ -1,6 +1,6 @@
-import { Entry } from '../entry';
+import { Entry } from '../entry/entry';
 
 export interface Seeds {
-  a: Entry;
-  b: Entry;
+  left: Entry;
+  right: Entry;
 }

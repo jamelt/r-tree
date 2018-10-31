@@ -1,19 +1,11 @@
-export function isAssigned(value: any): boolean {
-  return !isNil(value);
-}
-
-export function isNil(value: any): boolean {
-  return value == null;
-}
-
-export function error(message: string): never {
-  throw new Error(message);
+export function error(message: string): Error {
+  return new Error(message);
 }
 
 export function assert(condition: boolean, message?: string): void | never {
   if (condition) return;
   if (!message) message = 'Assertion failed';
-  error(message);
+  throw error(message);
 }
 
 export function mixinDeep(target: any, ...rest: any[]): any {

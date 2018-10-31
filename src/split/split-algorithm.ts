@@ -1,4 +1,4 @@
-import { Entry } from '../entry';
+import { Entry } from '../entry/entry';
 import { Seeds } from './seeds';
 import { Split } from './split';
 import { SplitAssignment } from './split-assignment';

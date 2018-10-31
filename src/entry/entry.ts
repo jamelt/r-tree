@@ -5,4 +5,5 @@ import { Node } from '../node/node';
 export interface Entry {
   parent: Node;
   region: Region;
+  child: Node;
 }

@@ -2,24 +2,38 @@ import { Id } from './data-types';
 import { createLeafNode } from './node/leaf-node';
 import { Node } from './node/node';
 import { Region } from './region';
-import { defaultSpec, Spec } from './spec';
-import { isNil, mixinDeep } from './utils';
+import { searchSubtree } from './search-subtree';
+import { createSpecification, Specification, Specification } from './specification';
 
-export default function(userSpec: Spec): RTree {
-  let spec: Spec = userSpec;
-  let root: Node = createLeafNode();
 
-  isNil(spec) ? defaultSpec() : mixinDeep(defaultSpec(), spec);
+export interface RTree {
+  insert(id: Id, region: Region): void;
+  search(region: Region): Id[];
+}
 
-  function insert(id: Id, region: Region) {}
+function Rtree(userSpecification?: Specification): RTree {
+  let specification: Specification;
+  let root: Node;
+
+  initialize();
+
+  function initialize() {
+    specification = createSpecification(userSpecification);
+    root = createLeafNode();
+  }
+
+  function insert(id: Id, region: Region) {
+
+  }
+
+  function search(region: Region): Id[] {
+    return searchSubtree(root, region);
+  }
 
   return {
-    root,
-    insert
+    insert,
+    search
   };
 }
 
-export interface RTree {
-  root: Node;
-  insert(id: Id, region: Region): void;
-}
+export default Rtree;
