@@ -1,13 +1,13 @@
-import { BranchEntry } from './branch-entry';
-import { BranchNode } from './branch-node';
+import { BranchNode } from './node/branch-node';
 import { Id } from './data-types';
-import { Entry } from './entry';
-import { LeafEntry } from './leaf-entry';
-import { LeafNode } from './leaf-node';
-import { Node } from './node';
+import { BranchEntry } from './entry/branch-entry';
+import { Entry } from './entry/entry';
+import { LeafEntry } from './entry/leaf-entry';
+import { LeafNode } from './node/leaf-node';
+import { Node } from './node/node';
 import { overlaps, Region } from './region';
 
-export function search(node: Node, region: Region): Id[] {
+export function searchSubtree(node: Node, region: Region): Id[] {
   return [...searchRecursive(node, region)];
 }
 

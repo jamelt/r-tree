@@ -1,4 +1,4 @@
-import { createNode, Node } from '../node';
+import { createNode, Node } from '../node/node';
 
 export interface Split {
   nodeA: Node;

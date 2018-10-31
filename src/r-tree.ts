@@ -1,6 +1,6 @@
 import { Id } from './data-types';
-import { createLeafNode } from './leaf-node';
-import { Node } from './node';
+import { createLeafNode } from './node/leaf-node';
+import { Node } from './node/node';
 import { Region } from './region';
 import { defaultSpec, Spec } from './spec';
 import { isNil, mixinDeep } from './utils';

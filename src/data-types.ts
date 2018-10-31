@@ -1,5 +1,5 @@
-import { Node } from './node';
-import { Entry } from './entry';
+import { Entry } from './entry/entry';
+import { Node } from './node/node';
 import { emptyRegion } from './region';
 
 export type Id = any;

@@ -1,5 +1,5 @@
-import { BranchEntry } from './branch-entry';
-import { NullEntry } from './data-types';
+import { NullEntry } from '../data-types';
+import { BranchEntry } from '../entry/branch-entry';
 import { Node } from './node';
 
 export interface BranchNode extends Node {

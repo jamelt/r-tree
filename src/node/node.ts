@@ -1,6 +1,7 @@
 import { createBranchNode } from './branch-node';
+import { Entry } from '../entry/entry';
 import { createLeafNode } from './leaf-node';
-import { Entry } from './entry';
+
 
 export interface Node {
   parent: Entry;

@@ -1,6 +1,6 @@
-import { Entry } from '../entry';
+import { Entry } from '../entry/entry';
 import { Split } from './split';
-import { Node} from '../node';
+import { Node} from '../node/node';
 import { SplitAlgorithm } from './split-algorithm';
 
 export function splitNode(algorithm: SplitAlgorithm, node: Node, entry: Entry): Split {

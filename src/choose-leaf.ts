@@ -1,8 +1,8 @@
-import { BranchEntry } from './branch-entry';
-import { BranchNode } from './branch-node';
-import { LeafEntry } from './leaf-entry';
-import { LeafNode } from './leaf-node';
-import { Node } from './node';
+import { BranchNode } from './node/branch-node';
+import { BranchEntry } from './entry/branch-entry';
+import { LeafEntry } from './entry/leaf-entry';
+import { LeafNode } from './node/leaf-node';
+import { Node } from './node/node';
 import { area, enlarge } from './region';
 
 export function chooseLeaf(node: Node, ref: LeafEntry): LeafNode {

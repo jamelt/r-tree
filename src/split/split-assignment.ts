@@ -1,4 +1,4 @@
-import { Entry } from '../entry';
+import { Entry } from '../entry/entry';
 
 export interface SplitAssignment {
   entry: Entry;
