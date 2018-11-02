@@ -48,3 +48,11 @@ export function nodeEntriesAvailable(specification: Specification, node: Node) {
 export function nodeAddEntry(node: Node, entry: Entry): void {
   node.entries.push(entry);
 }
+
+export function nodeDeficit(node: Node, specification: Specification) {
+  return specification.minEntries - node.entries.length;
+}
+
+export function nodeClear(node: Node) {
+  node.entries.splice(0);
+}
