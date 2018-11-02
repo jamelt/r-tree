@@ -1,5 +1,6 @@
 import { Entry } from './entry';
 import { Node, nodeCreate } from './node';
+import { Path } from './path';
 
 export interface Split {
   left: Node;
@@ -35,8 +36,12 @@ export interface SplitAlgorithm {
 export function splitNode(
   algorithm: SplitAlgorithm,
   node: Node,
-  entry: Entry
+  entry: Entry,
+  path: Path
 ): Split {
+  function
+
+
   const remaining = [...node.entries, entry];
   const seeds = algorithm.pickSeeds(remaining);
 
