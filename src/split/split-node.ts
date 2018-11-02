@@ -3,9 +3,9 @@ import { Split } from './split';
 import { Node} from '../node/node';
 import { SplitAlgorithm } from './split-algorithm';
 
-export function splitNode(algorithm: SplitAlgorithm, node: Node, entry: Entry): Split {
+export function split_node(algorithm: SplitAlgorithm, node: Node, entry: Entry): Split {
   const remaining = [...node.entries, entry];
-  const seeds = algorithm.pickSeeds(remaining);
+  const seeds = algorithm.pick_seeds(remaining);
 
 
 

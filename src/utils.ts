@@ -8,9 +8,9 @@ export function assert(condition: boolean, message?: string): void | never {
   throw error(message);
 }
 
-export function mixinDeep(target: any, ...rest: any[]): any {
+export function mixin_deep(target: any, ...rest: any[]): any {
   for (let obj of rest) {
-    if (isObject(obj)) {
+    if (is_object(obj)) {
       for (let key in obj) {
         if (key !== '__proto__') {
           mixin(target, obj[key], key);
@@ -23,14 +23,14 @@ export function mixinDeep(target: any, ...rest: any[]): any {
 
 export function mixin(target: any, val: any, key: string): void {
   let obj = target[key];
-  if (isObject(val) && isObject(obj)) {
-    mixinDeep(obj, val);
+  if (is_object(val) && is_object(obj)) {
+    mixin_deep(obj, val);
   } else {
     target[key] = val;
   }
 }
 
-export function isObject(val: any): boolean {
+export function is_object(val: any): boolean {
   return (
     typeof val === 'function' ||
     (typeof val === 'object' && val !== null && !Array.isArray(val))

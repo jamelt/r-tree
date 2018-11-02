@@ -4,6 +4,6 @@ import { Split } from './split';
 import { SplitAssignment } from './split-assignment';
 
 export interface SplitAlgorithm {
-  pickNext(remaining: Entry[], split: Split): SplitAssignment;
-  pickSeeds(remaining: Entry[]): Seeds;
+  pick_next(remaining: Entry[], split: Split): SplitAssignment;
+  pick_seeds(remaining: Entry[]): Seeds;
 }

@@ -1,14 +1,14 @@
 import { Entry } from '../entry/entry';
-import { createLeafNode } from './leaf-node';
+import { leaf_node_create } from './leaf-node';
 
 export interface Node {
   entries: Entry[];
   leaf: boolean;
 }
 
-export function createNode(template: Node): Node {
+export function node_create(template: Node): Node {
   if (template.leaf) {
-    return createLeafNode();
+    return leaf_node_create();
   } else {
     return {
       entries: [],

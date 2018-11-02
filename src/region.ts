@@ -5,7 +5,7 @@ export interface Region {
   max: number[];
 }
 
-export function assertSameDimensions(x: Region, y?: Region): number {
+export function region_assert_same_dimensions(x: Region, y?: Region): number {
   if (y === undefined) {
     assert(
       x.min.length === x.max.length,
@@ -22,32 +22,32 @@ export function assertSameDimensions(x: Region, y?: Region): number {
   return x.min.length;
 }
 
-export function area(region: Region): number {
+export function region_area(region: Region): number {
   let area = 1.0;
-  for (let i = 0; i < dimensions(region); i++)
+  for (let i = 0; i < region_dimensions(region); i++)
     area *= region.max[i] - region.min[i];
   return area;
 }
 
-export function dimensions(region: Region) {
-  assertSameDimensions(region);
+export function region_dimensions(region: Region) {
+  region_assert_same_dimensions(region);
   return region.min.length;
 }
 
-export function overlaps(x: Region, y: Region): boolean {
-  const dimensions = assertSameDimensions(x, y);
+export function region_overlaps(x: Region, y: Region): boolean {
+  const dimensions = region_assert_same_dimensions(x, y);
   for (let i = 0; i < dimensions; i++)
     if (x.min[i] > y.max[i] || x.max[i] < y.min[i]) return false;
   return true;
-}
+}e
 
-export function region() {
+export function region_create() {
   return { min: [], max: [] };
 }
 
-export function enlarge(x: Region, y: Region): Region {
-  const dimensions = assertSameDimensions(x, y);
-  let enlargement: Region = region();
+export function region_enlarge(x: Region, y: Region): Region {
+  const dimensions = region_assert_same_dimensions(x, y);
+  let enlargement: Region = region_create();
   for (let i = 0; i < dimensions; i++) {
     enlargement.min.push(Math.min(x.min[i], y.min[i]));
     enlargement.max.push(Math.max(x.max[i], y.max[i]));
@@ -55,6 +55,6 @@ export function enlarge(x: Region, y: Region): Region {
   return enlargement;
 }
 
-export function emptyRegion(): Region {
+export function region_create_empty(): Region {
   return { min: [], max: [] };
 }

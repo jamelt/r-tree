@@ -1,24 +1,24 @@
-import { error, mixinDeep } from './utils';
+import { error, mixin_deep } from './utils';
 
 export interface Specification {
   minEntries: number;
   maxEntries: number;
 }
 
-export function defaultSpec(): Specification {
+export function specification_default(): Specification {
   return {
     minEntries: 2,
     maxEntries: 5
   };
 }
 
-export function createSpecification(
-  userSpecification: Specification = defaultSpec()
+export function specification_create(
+  userSpecification: Specification = specification_default()
 ): Specification {
-  return mixinDeep({}, userSpecification);
+  return mixin_deep({}, userSpecification);
 }
 
-export function validateSpecification(specification: Specification): void {
+export function specification_validate(specification: Specification): void {
   if (!specification.maxEntries) throw error('Undefined maxEntries');
   if (!specification.minEntries) throw error('Undefined minEntries');
   if (specification.minEntries > specification.maxEntries / 2)

@@ -6,7 +6,7 @@ export interface LeafNode extends Node {
   leaf: true;
 }
 
-export function createLeafNode(): LeafNode {
+export function leaf_node_create(): LeafNode {
   return {
     entries: [],
     leaf: true,
