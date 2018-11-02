@@ -1,5 +1,6 @@
 import { SplitAlgorithm } from './split';
 
 export function quadraticSplitAlgorithm(): SplitAlgorithm {
-  return undefined;
+  // TODO Needs implemenation
+  return <SplitAlgorithm>{};
 }

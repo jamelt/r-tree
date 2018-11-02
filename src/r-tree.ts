@@ -3,8 +3,7 @@ import { leafNodeCreate } from './node';
 import { Node } from './node';
 import { Region } from './region-create';
 import { search } from './search';
-import { specificationCreate, Specification, Specification } from './specification';
-
+import { specificationCreate, Specification } from './specification';
 
 export interface RTree {
   insert(id: Id, region: Region): void;
@@ -12,6 +11,7 @@ export interface RTree {
 }
 
 function Rtree(userSpecification?: Specification): RTree {
+  // @ts-ignore
   let specification: Specification;
   let root: Node;
 
@@ -22,17 +22,13 @@ function Rtree(userSpecification?: Specification): RTree {
     root = leafNodeCreate();
   }
 
-  function insert(id: Id, region: Region) {
-
-  }
-
-  function search(region: Region): Id[] {
-    return search(root, region);
-  }
+  function insert(id: Id, region: Region) {}
 
   return {
     insert,
-    search
+    search: (region: Region): Id[] => {
+      return search(root, region);
+    }
   };
 }
 
