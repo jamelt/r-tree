@@ -10,13 +10,13 @@ export function insert(
   node: Node,
   entry: LeafEntry
 ): void {
-  const { algorithm } = specification;
   const path = pathCreate();
   const leaf = chooseLeaf(node, entry, path);
 
   if (nodeEntriesAvailable(specification, leaf)) {
     nodeAddEntry(leaf, entry);
   } else {
-    const split = splitNode(algorithm, leaf, entry, path);
+    // @ts-ignore
+    const split = splitNode(specification, leaf, entry);
   }
 }
