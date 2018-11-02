@@ -1,9 +1,9 @@
 import { Id } from './data-types';
-import { createLeafNode } from './node/leaf-node';
-import { Node } from './node/node';
-import { Region } from './region';
-import { searchSubtree } from './search-subtree';
-import { createSpecification, Specification, Specification } from './specification';
+import { leafNodeCreate } from './node';
+import { Node } from './node';
+import { Region } from './region-create';
+import { search } from './search';
+import { specificationCreate, Specification, Specification } from './specification';
 
 
 export interface RTree {
@@ -18,8 +18,8 @@ function Rtree(userSpecification?: Specification): RTree {
   initialize();
 
   function initialize() {
-    specification = createSpecification(userSpecification);
-    root = createLeafNode();
+    specification = specificationCreate(userSpecification);
+    root = leafNodeCreate();
   }
 
   function insert(id: Id, region: Region) {
@@ -27,7 +27,7 @@ function Rtree(userSpecification?: Specification): RTree {
   }
 
   function search(region: Region): Id[] {
-    return searchSubtree(root, region);
+    return search(root, region);
   }
 
   return {

@@ -5,7 +5,7 @@ export interface Region {
   max: number[];
 }
 
-export function assertSameDimensions(x: Region, y?: Region): number {
+export function regionAssertSameDimensions(x: Region, y?: Region): number {
   if (y === undefined) {
     assert(
       x.min.length === x.max.length,
@@ -22,39 +22,35 @@ export function assertSameDimensions(x: Region, y?: Region): number {
   return x.min.length;
 }
 
-export function area(region: Region): number {
+export function regionArea(region: Region): number {
   let area = 1.0;
-  for (let i = 0; i < dimensions(region); i++)
+  for (let i = 0; i < regionDimensions(region); i++)
     area *= region.max[i] - region.min[i];
   return area;
 }
 
-export function dimensions(region: Region) {
-  assertSameDimensions(region);
+export function regionDimensions(region: Region) {
+  regionAssertSameDimensions(region);
   return region.min.length;
 }
 
-export function overlaps(x: Region, y: Region): boolean {
-  const dimensions = assertSameDimensions(x, y);
+export function regionOverlaps(x: Region, y: Region): boolean {
+  const dimensions = regionAssertSameDimensions(x, y);
   for (let i = 0; i < dimensions; i++)
     if (x.min[i] > y.max[i] || x.max[i] < y.min[i]) return false;
   return true;
 }
 
-export function region() {
+export function regionCreate(): Region {
   return { min: [], max: [] };
 }
 
-export function enlarge(x: Region, y: Region): Region {
-  const dimensions = assertSameDimensions(x, y);
-  let enlargement: Region = region();
+export function regionEnlarge(x: Region, y: Region): Region {
+  const dimensions = regionAssertSameDimensions(x, y);
+  let enlargement: Region = regionCreate();
   for (let i = 0; i < dimensions; i++) {
     enlargement.min.push(Math.min(x.min[i], y.min[i]));
     enlargement.max.push(Math.max(x.max[i], y.max[i]));
   }
   return enlargement;
-}
-
-export function emptyRegion(): Region {
-  return { min: [], max: [] };
 }
