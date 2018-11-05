@@ -1,4 +1,5 @@
 import { Entry, LeafEntry } from './entry';
+import { Region, regionArea, regionEnlarge } from './region-create';
 import { Specification } from './specification';
 
 export const NULL_NODE: Node = Object.freeze({
@@ -55,4 +56,10 @@ export function nodeDeficit(node: Node, specification: Specification) {
 
 export function nodeClear(node: Node) {
   node.entries.splice(0);
+}
+
+export function nodeRegion(node: Node): Region {
+  return node.entries.reduce((region, entry) => {
+    return regionEnlarge(region, entry.region);
+  }, undefined);
 }

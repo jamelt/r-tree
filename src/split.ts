@@ -1,5 +1,12 @@
-import { Entry } from './entry';
-import { Node, nodeAddEntry, nodeClear, nodeCreate, nodeDeficit } from './node';
+import { Entry, entryCreateNull } from './entry';
+import {
+  Node,
+  nodeAddEntry,
+  nodeClear,
+  nodeCreate,
+  nodeCreateNull,
+  nodeDeficit
+} from './node';
 import { Specification } from './specification';
 
 export interface Split {
@@ -24,9 +31,20 @@ export interface Seeds {
   right: Entry;
 }
 
+export function seedsCreate(): Seeds {
+  return {
+    left: entryCreateNull(),
+    right: entryCreateNull()
+  };
+}
+
 export interface SplitAssignment {
   entry: Entry;
   node: Node;
+}
+
+export function splitAssignmentCreate(): SplitAssignment {
+  return { entry: entryCreateNull(), node: nodeCreateNull() };
 }
 
 export interface SplitAlgorithm {
