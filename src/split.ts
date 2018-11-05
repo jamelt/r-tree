@@ -8,6 +8,7 @@ import {
   nodeDeficit
 } from './node';
 import { Specification } from './specification';
+import { removeValue } from './utils';
 
 export interface Split {
   left: Node;
@@ -74,6 +75,7 @@ export function splitNode(
   function assignNext() {
     const { node, entry } = algorithm.pickNext(remaining, split);
     nodeAddEntry(node, entry);
+    removeValue(remaining, entry);
   }
 
   const { algorithm } = specification;
