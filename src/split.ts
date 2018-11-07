@@ -1,12 +1,5 @@
-import { Entry, entryCreateNull } from './entry';
-import {
-  Node,
-  nodeAddEntry,
-  nodeClear,
-  nodeCreate,
-  nodeCreateNull,
-  nodeDeficit
-} from './node';
+import { Entry, NULL_ENTRY } from './entry';
+import { Node, nodeAdd, nodeClear, nodeCreate, nodeDeficit, NULL_NODE } from './node';
 import { Specification } from './specification';
 import { removeValue } from './utils';
 
@@ -34,8 +27,8 @@ export interface Seeds {
 
 export function seedsCreate(): Seeds {
   return {
-    left: entryCreateNull(),
-    right: entryCreateNull()
+    left: NULL_ENTRY,
+    right: NULL_ENTRY
   };
 }
 
@@ -45,7 +38,7 @@ export interface SplitAssignment {
 }
 
 export function splitAssignmentCreate(): SplitAssignment {
-  return { entry: entryCreateNull(), node: nodeCreateNull() };
+  return { entry: NULL_ENTRY, node: NULL_NODE };
 }
 
 export interface SplitAlgorithm {
@@ -64,17 +57,17 @@ export function splitNode(
 
   function assignSeeds(): void {
     const seeds = algorithm.pickSeeds(remaining);
-    nodeAddEntry(split.left, seeds.left);
-    nodeAddEntry(split.right, seeds.right);
+    nodeAdd(split.left, seeds.left);
+    nodeAdd(split.right, seeds.right);
   }
 
   function addRemaining(node: Node) {
-    remaining.splice(0).forEach(entry => nodeAddEntry(node, entry));
+    remaining.splice(0).forEach(entry => nodeAdd(node, entry));
   }
 
   function assignNext() {
     const { node, entry } = algorithm.pickNext(remaining, split);
-    nodeAddEntry(node, entry);
+    nodeAdd(node, entry);
     removeValue(remaining, entry);
   }
 

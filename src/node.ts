@@ -1,6 +1,7 @@
 import { Entry, LeafEntry } from './entry';
 import { Region, regionArea, regionEnlarge } from './region-create';
 import { Specification } from './specification';
+import { removeValue } from './utils';
 
 export const NULL_NODE: Node = Object.freeze({
   entries: [],
@@ -46,8 +47,12 @@ export function nodeEntriesAvailable(specification: Specification, node: Node) {
   return node.entries.length < specification.maxEntries;
 }
 
-export function nodeAddEntry(node: Node, entry: Entry): void {
+export function nodeAdd(node: Node, entry: Entry): void {
   node.entries.push(entry);
+}
+
+export function nodeRemove(node: Node, entry: Entry): void {
+  removeValue(node.entries, entry);
 }
 
 export function nodeDeficit(node: Node, specification: Specification) {
@@ -59,7 +64,8 @@ export function nodeClear(node: Node) {
 }
 
 export function nodeRegion(node: Node): Region {
-  return node.entries.reduce((region, entry) => {
-    return regionEnlarge(region, entry.region);
-  }, undefined);
+  return node.entries.reduce(
+    (region, entry) => regionEnlarge(region, entry.region),
+    undefined
+  );
 }
