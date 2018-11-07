@@ -1,8 +1,9 @@
-import { Entry, NULL_ENTRY } from './entry';
+import { Entry, entryCreate, NULL_ENTRY } from './entry';
 import { Node, nodeAdd, nodeEntriesAvailable, nodeRegion, NULL_NODE } from './node';
 import { Path } from './path';
 import { regionEnlarge } from './region-create';
 import { Specification } from './specification';
+import { splitNode } from './split';
 
 interface RootAdjustment {}
 
@@ -29,10 +30,13 @@ export function adjustTree(
 
   function propagateSplit() {
     if (split === undefined) return;
-    if (nodeEntriesAvailable(specification, parent.node)) {
-      const entry = entryCreate()
-      nodeAdd(parent.node, split);
-    }
+
+    if (nodeEntriesAvailable(specification, parent.node))
+      nodeAdd(parent.node, entryCreate(split, nodeRegion(split)));
+
+    else
+      splitNode(specification, parent.node, )
+
   }
 
   let parent: Parent = parentCreateNull();
