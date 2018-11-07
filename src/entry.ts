@@ -3,11 +3,12 @@ import { Node, nodeCreateNull, NULL_NODE } from './node';
 import { Region, regionCreate } from './region-create';
 
 export interface Entry {
-  region: Region;
   child: Node;
+  region: Region;
 }
 
 export interface LeafEntry extends Entry {
+  child: undefined;
   id: Id;
 }
 
@@ -22,3 +23,12 @@ export const NULL_ENTRY: Entry = Object.freeze({
   region: regionCreate(),
   child: nodeCreateNull()
 });
+
+
+export function entryCreateLeaf(id: Id, region: Region): LeafEntry {
+  return { id, region, child: undefined };
+}
+
+export function entryCreate(child:Node, region: Region): Entry {
+  return { child, region };
+}

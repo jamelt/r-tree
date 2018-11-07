@@ -4,18 +4,18 @@ import { Path } from './path';
 import { regionArea, regionEnlarge } from './region-create';
 import { error } from './utils';
 
-export function chooseLeaf(node: Node, ref: LeafEntry, path: Path): LeafNode {
+export function chooseLeaf(path: Path, node: Node, ref: LeafEntry): LeafNode {
   path.push(node);
 
   if (node.leaf) return <LeafNode>node;
 
   const entry = leastEnlargement(node.entries, ref);
 
+  path.push(entry);
+
   if (!entry.child) throw error('entry missing child');
 
-  path.push(entry.child);
-
-  return chooseLeaf(entry.child, ref, path);
+  return chooseLeaf(path, entry.child, ref);
 }
 
 function leastEnlargement(entries: Entry[], ref: LeafEntry): Entry {

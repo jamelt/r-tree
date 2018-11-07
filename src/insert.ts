@@ -1,6 +1,6 @@
 import { chooseLeaf } from './choose-leaf';
 import { LeafEntry } from './entry';
-import { Node, nodeAddEntry, nodeEntriesAvailable } from './node';
+import { Node, nodeAdd, nodeEntriesAvailable } from './node';
 import { pathCreate } from './path';
 import { Specification } from './specification';
 import { splitNode } from './split';
@@ -11,12 +11,13 @@ export function insert(
   entry: LeafEntry
 ): void {
   const path = pathCreate();
-  const leaf = chooseLeaf(node, entry, path);
+  const leaf = chooseLeaf(path, node, entry);
 
   if (nodeEntriesAvailable(specification, leaf)) {
-    nodeAddEntry(leaf, entry);
+    nodeAdd(leaf, entry);
   } else {
     // @ts-ignore
     const split = splitNode(specification, leaf, entry);
+    adjustTree(split.left, split.right)
   }
 }

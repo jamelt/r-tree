@@ -94,3 +94,13 @@ function flattenDownDepth<T>(array: T[], result: T[], depth: number): T[] {
 
   return result;
 }
+
+export function removeValue<T>(array: T[], value: T, count?: number): T[] {
+  let index;
+  let i = 0;
+
+  while ((!count || i++ < count) && ~(index = array.indexOf(value)))
+    array.splice(index, 1);
+
+  return array;
+}

@@ -46,6 +46,10 @@ export function regionCreate(): Region {
 }
 
 export function regionEnlarge(x: Region, y: Region): Region {
+  if (x !== undefined && y === undefined)
+    return x;
+  if (x === undefined && y !== undefined)
+    return y;
   const dimensions = regionAssertSameDimensions(x, y);
   let enlargement: Region = regionCreate();
   for (let i = 0; i < dimensions; i++) {
