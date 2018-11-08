@@ -1,9 +1,10 @@
 import { Id } from './data-types';
-import { leafNodeCreate } from './node';
-import { Node } from './node';
+import { entryCreateLeaf } from './entry';
+import { insert as _insert } from './insert';
+import { leafNodeCreate, Node } from './node';
 import { Region } from './region-create';
-import { search } from './search';
-import { specificationCreate, Specification } from './specification';
+import { search as _search } from './search';
+import { Specification, specificationCreate } from './specification';
 
 export interface RTree {
   insert(id: Id, region: Region): void;
@@ -11,7 +12,6 @@ export interface RTree {
 }
 
 function Rtree(userSpecification?: Specification): RTree {
-  // @ts-ignore
   let specification: Specification;
   let root: Node;
 
@@ -22,12 +22,16 @@ function Rtree(userSpecification?: Specification): RTree {
     root = leafNodeCreate();
   }
 
-  function insert(id: Id, region: Region) {}
+  function insert(id: Id, region: Region) {
+    let split = _insert(specification, root, entryCreateLeaf(id, region));
+    if (split === undefined) return;
+    root = split;
+  }
 
   return {
     insert,
     search: (region: Region): Id[] => {
-      return search(root, region);
+      return _search(root, region);
     }
   };
 }
