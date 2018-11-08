@@ -45,11 +45,8 @@ export function regionCreate(): Region {
   return { min: [], max: [] };
 }
 
-export function regionEnlarge(x: Region, y: Region): Region {
-  if (x !== undefined && y === undefined)
-    return x;
-  if (x === undefined && y !== undefined)
-    return y;
+export function regionEnlarge(x: Region, y?: Region): Region {
+  if (y == null) return x;
   const dimensions = regionAssertSameDimensions(x, y);
   let enlargement: Region = regionCreate();
   for (let i = 0; i < dimensions; i++) {

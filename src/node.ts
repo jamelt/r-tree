@@ -1,5 +1,5 @@
 import { Entry, LeafEntry } from './entry';
-import { Region, regionArea, regionEnlarge } from './region-create';
+import { Region, regionEnlarge } from './region-create';
 import { Specification } from './specification';
 import { removeValue } from './utils';
 
@@ -64,8 +64,8 @@ export function nodeClear(node: Node) {
 }
 
 export function nodeRegion(node: Node): Region {
-  return node.entries.reduce(
-    (region, entry) => regionEnlarge(region, entry.region),
-    undefined
-  );
+  return node.entries.reduce((region, entry) => {
+    const argList = [entry.region, region ? region : undefined];
+    return regionEnlarge.apply(argList);
+  }, null);
 }

@@ -8,7 +8,6 @@ export interface Entry {
 }
 
 export interface LeafEntry extends Entry {
-  child: undefined;
   id: Id;
 }
 
@@ -26,9 +25,10 @@ export const NULL_ENTRY: Entry = Object.freeze({
 
 
 export function entryCreateLeaf(id: Id, region: Region): LeafEntry {
-  return { id, region, child: undefined };
+  return { id, region, child: NULL_NODE };
 }
 
 export function entryCreate(child:Node, region: Region): Entry {
   return { child, region };
 }
+

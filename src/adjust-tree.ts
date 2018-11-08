@@ -1,24 +1,23 @@
-import { Entry, entryCreate, NULL_ENTRY } from './entry';
-import { Node, nodeAdd, nodeEntriesAvailable, nodeRegion, NULL_NODE } from './node';
+import { Entry, entryCreate } from './entry';
+import { Node, nodeAdd, nodeEntriesAvailable, nodeRegion } from './node';
 import { Path } from './path';
 import { regionEnlarge } from './region-create';
 import { Specification } from './specification';
+
 import { splitNode } from './split';
 
-interface RootAdjustment {}
+export interface RootAdjustment {
+  root: Node;
+  split?: Node;
+}
+
+function rootAdjustmentCreate(root: Node, split?: Node) {
+  return { root, split };
+}
 
 interface Parent {
   entry: Entry;
   node: Node;
-}
-
-function parentCreateNull(): Parent {
-  return { entry: NULL_ENTRY, node: NULL_NODE };
-}
-
-function parentEnlarge(parent: Parent, node: Node): void {
-  if (parent.entry === undefined) return;
-  parent.entry.region = regionEnlarge(parent.entry.region, nodeRegion(node));
 }
 
 export function adjustTree(
@@ -27,25 +26,35 @@ export function adjustTree(
   node: Node,
   split?: Node
 ): RootAdjustment {
+  function loadParent(): Parent {
+    return { entry: <Entry>path.pop(), node: <Node>path.pop() };
+  }
 
-  function propagateSplit() {
+  function parentEnlarge(): void {
+    if (parent.entry === undefined) return;
+    parent.entry.region = regionEnlarge(parent.entry.region, nodeRegion(node));
+  }
+
+  function propagateSplit(): Node | undefined {
     if (split === undefined) return;
 
-    if (nodeEntriesAvailable(specification, parent.node))
-      nodeAdd(parent.node, entryCreate(split, nodeRegion(split)));
+    const splitEntry = entryCreate(split, nodeRegion(split));
 
-    else
-      splitNode(specification, parent.node, )
-
+    if (nodeEntriesAvailable(specification, parent.node)) {
+      nodeAdd(parent.node, splitEntry);
+      return undefined;
+    } else {
+      return splitNode(specification, parent.node, splitEntry).right;
+    }
   }
 
-  let parent: Parent = parentCreateNull();
-
+  let parent: Parent = loadParent();
   while (!path.isRoot(node)) {
-    parent.entry = <Entry>path.pop();
-    parent.node = <Node>path.pop();
-
-    parentEnlarge(parent, node);
+    parentEnlarge();
     split = propagateSplit();
+    node = parent.node;
+    parent = loadParent();
   }
+
+  return rootAdjustmentCreate(node, split);
 }

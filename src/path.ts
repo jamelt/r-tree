@@ -10,6 +10,7 @@ export interface Path {
   value(index?: number): Element | undefined;
   isRoot(node: Node): boolean;
   length(): number;
+  root(): Node;
 }
 
 export function pathCreate(): Path {
@@ -19,7 +20,6 @@ export function pathCreate(): Path {
   const instance = {};
 
   function push(element: Element): Path {
-    // TODO Validate node -> entry -> node -> entry ...
     sequence.push(element);
     currentIndex += 1;
     return <Path>instance;
@@ -36,10 +36,16 @@ export function pathCreate(): Path {
   }
 
   function isRoot(node: Node) {
-    return sequence.length >= 0  && node === sequence[0];
+    return sequence.length > 0 && node === sequence[0];
+  }
+
+  function root(): Node {
+    return <Node>sequence[0];
   }
 
   const length = () => sequence.length;
 
-  return Object.freeze(mixinDeep(instance, { push, pop, value, length, isRoot }));
+  return Object.freeze(
+    mixinDeep(instance, { push, pop, value, length, isRoot, root })
+  );
 }
