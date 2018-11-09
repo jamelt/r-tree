@@ -1,3 +1,7 @@
+export function isNil(obj: any) {
+  return obj == null;
+}
+
 export function error(message: string): Error {
   return new Error(message);
 }
