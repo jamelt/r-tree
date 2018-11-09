@@ -1,5 +1,6 @@
-import { Entry, entryCreate } from './entry';
+import { entryCreate } from './entry';
 import { Node, nodeAdd, nodeEntriesAvailable, nodeRegion } from './node';
+import { loadParentFn, Parent } from './parent';
 import { Path } from './path';
 import { regionEnlarge } from './region-create';
 import { Specification } from './specification';
@@ -15,20 +16,13 @@ function rootAdjustmentCreate(root: Node, split?: Node) {
   return { root, split };
 }
 
-interface Parent {
-  entry: Entry;
-  node: Node;
-}
-
 export function adjustTree(
   specification: Specification,
   path: Path,
   node: Node,
   split?: Node
 ): RootAdjustment {
-  function loadParent(): Parent {
-    return { entry: <Entry>path.pop(), node: <Node>path.pop() };
-  }
+  const loadParent = loadParentFn(path);
 
   function parentEnlarge(): void {
     if (parent.entry === undefined) return;

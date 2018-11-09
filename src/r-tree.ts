@@ -9,6 +9,7 @@ import { Specification, specificationCreate } from './specification';
 export interface RTree {
   insert(id: Id, region: Region): void;
   search(region: Region): Id[];
+  condense(): void;
 }
 
 function Rtree(userSpecification?: Specification): RTree {
@@ -28,12 +29,15 @@ function Rtree(userSpecification?: Specification): RTree {
     root = split;
   }
 
-  return {
+  function condense() {
+    if (!root.leaf && root.entries.length === 1) root = root.entries[0].child;
+  }
+
+  return Object.freeze({
     insert,
-    search: (region: Region): Id[] => {
-      return _search(root, region);
-    }
-  };
+    search: (region: Region): Id[] => _search(root, region),
+    condense
+  });
 }
 
 export default Rtree;

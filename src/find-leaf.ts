@@ -15,8 +15,13 @@ export function findLeaf(
   result: FindLeafResult
 ): FindLeafResult {
   path.push(node);
-  if (node.leaf) findEntry(<LeafNode>node, id, result);
-  else findNode(path, node, region, id, result);
+
+  if (node.leaf)
+    findEntry(<LeafNode>node, id, result);
+
+  else
+    findNode(path, node, region, id, result);
+
   return result;
 }
 

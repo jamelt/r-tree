@@ -1,3 +1,4 @@
+import { Id } from './data-types';
 import { Entry, LeafEntry } from './entry';
 import { Region, regionEnlarge } from './region-create';
 import { Specification } from './specification';
@@ -68,4 +69,14 @@ export function nodeRegion(node: Node): Region {
     const argList = [entry.region, region ? region : undefined];
     return regionEnlarge.apply(argList);
   }, null);
+}
+
+export function nodeFind(node: LeafNode, id: Id): LeafEntry | undefined {
+  let found: LeafEntry | undefined;
+  node.entries.some(entry => {
+    const matches = entry.id === id;
+    if (matches) found = entry;
+    return entry.id === id;
+  });
+  return found;
 }
