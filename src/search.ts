@@ -14,15 +14,15 @@ export function search(node: Node, region: Region): Id[] {
   return flatten(results);
 }
 
-function findChildren(node: Node, region: Region): Node[] {
+export function findChildren(node: Node, region: Region): Node[] {
   return entries<Entry>(node, region).map(entry => entry.child);
 }
 
-function findIds(leaf: Node, region: Region): Id[] {
+export function findIds(leaf: Node, region: Region): Id[] {
   return entries<LeafEntry>(leaf, region).map(entry => entry.id);
 }
 
-function entries<T extends Entry>(node: Node, region: Region): T[] {
+export function entries<T extends Entry>(node: Node, region: Region): T[] {
   const entries = <T[]>node.entries;
   return entries.filter(entry => regionOverlaps(entry.region, region));
 }
