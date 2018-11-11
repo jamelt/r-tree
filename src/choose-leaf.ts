@@ -1,7 +1,7 @@
 import { Entry, LeafEntry } from './entry';
 import { LeafNode, Node } from './node';
 import { Path } from './path';
-import { regionArea, regionEnlarge } from './region-create';
+import { regionArea, regionEnlarge } from './region';
 import { error } from './utils';
 
 export function chooseLeaf(path: Path, node: Node, ref: LeafEntry): LeafNode {

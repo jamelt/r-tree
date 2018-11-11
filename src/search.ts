@@ -3,7 +3,7 @@ import { Entry } from './entry';
 import { LeafEntry } from './entry';
 import { LeafNode } from './node';
 import { Node } from './node';
-import { regionOverlaps, Region } from './region-create';
+import { regionOverlaps, Region } from './region';
 import { flatten } from './utils';
 
 export function search(node: Node, region: Region): Id[] {

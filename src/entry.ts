@@ -1,6 +1,6 @@
 import { Id } from './data-types';
 import { Node, nodeCreateNull, NULL_NODE } from './node';
-import { Region, regionCreate } from './region-create';
+import { Region, regionCreate } from './region';
 
 export interface Entry {
   child: Node;
@@ -9,13 +9,6 @@ export interface Entry {
 
 export interface LeafEntry extends Entry {
   id: Id;
-}
-
-export function entryCreateNull(): Entry {
-  return {
-    region: regionCreate(),
-    child: NULL_NODE
-  };
 }
 
 export const NULL_ENTRY: Entry = Object.freeze({

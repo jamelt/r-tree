@@ -1,7 +1,7 @@
 import { Id } from './data-types';
 import { LeafNode, Node } from './node';
 import { Path } from './path';
-import { Region, regionOverlaps } from './region-create';
+import { Region, regionOverlaps } from './region';
 
 export interface FindLeafResult {
   leaf?: LeafNode;

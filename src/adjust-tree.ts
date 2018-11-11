@@ -2,7 +2,7 @@ import { entryCreate } from './entry';
 import { Node, nodeAdd, nodeEntriesAvailable, nodeRegion } from './node';
 import { loadParentFn, Parent } from './parent';
 import { Path } from './path';
-import { regionEnlarge } from './region-create';
+import { regionEnlarge } from './region';
 import { Specification } from './specification';
 
 import { splitNode } from './split';

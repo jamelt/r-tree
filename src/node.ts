@@ -1,6 +1,6 @@
 import { Id } from './data-types';
 import { Entry, LeafEntry } from './entry';
-import { Region, regionEnlarge } from './region-create';
+import { Region, regionEnlarge } from './region';
 import { Specification } from './specification';
 import { removeValue } from './utils';
 

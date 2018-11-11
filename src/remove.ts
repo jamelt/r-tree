@@ -5,7 +5,7 @@ import { findLeaf } from './find-leaf';
 import { nodeFind, nodeRemove } from './node';
 import { pathCreate } from './path';
 import { RTree } from './r-tree';
-import { Region } from './region-create';
+import { Region } from './region';
 import { Specification } from './specification';
 import { Node } from './node';
 

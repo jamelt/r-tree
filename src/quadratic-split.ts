@@ -1,6 +1,6 @@
 import { Entry } from './entry';
 import { nodeRegion } from './node';
-import { regionArea, regionEnlarge } from './region-create';
+import { regionArea, regionEnlarge } from './region';
 import {
   Seeds,
   seedsCreate,
