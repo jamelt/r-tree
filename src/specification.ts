@@ -17,7 +17,7 @@ export function defaultSpec(): Specification {
 }
 
 export function specificationCreate(
-  userSpecification: Specification = defaultSpec()
+  userSpecification: Partial<Specification> = defaultSpec()
 ): Specification {
   return mixinDeep(defaultSpec(), userSpecification);
 }

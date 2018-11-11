@@ -1,7 +1,7 @@
 import { Id } from './data-types';
 import { entryCreateLeaf } from './entry';
 import { insert as _insert } from './insert';
-import { leafNodeCreate, Node } from './node';
+import { nodeCreateLeaf, Node } from './node';
 import { Region } from './region';
 import { remove as _remove } from './remove';
 import { search as _search } from './search';
@@ -11,10 +11,12 @@ import { mixinDeep } from './utils';
 export interface RTree {
   insert(id: Id, region: Region): void;
   search(region: Region): Id[];
+  remove(id: Id, region: Region): void;
   condense(): void;
+  inspect(): Node;
 }
 
-function Rtree(userSpecification?: Specification): RTree {
+function Rtree(userSpecification?: Partial<Specification>): RTree {
   let specification: Specification;
   let root: Node;
 
@@ -22,7 +24,7 @@ function Rtree(userSpecification?: Specification): RTree {
 
   function initialize(): any {
     specification = specificationCreate(userSpecification);
-    root = leafNodeCreate();
+    root = nodeCreateLeaf();
     return {};
   }
 
@@ -43,7 +45,8 @@ function Rtree(userSpecification?: Specification): RTree {
       insert,
       search: (region: Region): Id[] => _search(root, region),
       remove,
-      condense
+      condense,
+      inspect: () => root
     })
   );
 }

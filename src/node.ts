@@ -19,7 +19,7 @@ export interface LeafNode extends Node {
   leaf: true;
 }
 
-export function leafNodeCreate(): LeafNode {
+export function nodeCreateLeaf(): LeafNode {
   return {
     entries: [],
     leaf: true
@@ -28,7 +28,7 @@ export function leafNodeCreate(): LeafNode {
 
 export function nodeCreate(template?: Node): Node {
   if (template && template.leaf) {
-    return leafNodeCreate();
+    return nodeCreateLeaf();
   } else {
     return {
       entries: [],
@@ -67,7 +67,7 @@ export function nodeClear(node: Node) {
 export function nodeRegion(node: Node): Region {
   return node.entries.reduce((region, entry) => {
     const argList = [entry.region, region ? region : undefined];
-    return regionEnlarge.apply(argList);
+    return regionEnlarge.apply(null, argList);
   }, null);
 }
 
