@@ -26,7 +26,7 @@ export function adjustTree(
 
   function parentEnlarge(): void {
     if (parent.entry === undefined) return;
-    parent.entry.region = regionEnlarge(parent.entry.region, nodeRegion(node));
+    parent.entry.region = regionEnlarge(nodeRegion(node), parent.entry.region);
   }
 
   function propagateSplit(): Node | undefined {
