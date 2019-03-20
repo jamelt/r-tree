@@ -15,6 +15,7 @@ export const data: Data = {
   a: { id: 'a', region: {min:[5, 5], max:[7,7]}},
   b: { id: 'b', region: {min:[70, 10], max:[75,15]}},
   c: { id: 'c', region: {min:[44, 60], max: [49, 63]}},
+  d: { id: 'd', region: {min:[15, 31], max: [25, 74]}},
 };
 
 /*

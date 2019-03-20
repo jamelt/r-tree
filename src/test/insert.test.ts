@@ -3,10 +3,11 @@ import { data } from './data';
 
 test('insert', () => {
   const rtree = RTree({minEntries: 1, maxEntries: 2});
-  const { a, b, c } = data;
+  const { a, b, c, d } = data;
   rtree.insert(a.id, a.region);
   rtree.insert(b.id, b.region);
   rtree.insert(c.id, c.region);
+  rtree.insert(d.id, d.region);
   const root = rtree.inspect();
   console.log(root);
 });
