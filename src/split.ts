@@ -57,8 +57,8 @@ export function splitNode(
 
   function assignSeeds(): void {
     const seeds = algorithm.pickSeeds(remaining);
-    nodeAdd(split.left, seeds.left);
-    nodeAdd(split.right, seeds.right);
+    removeValue(remaining, nodeAdd(split.left, seeds.left));
+    removeValue(remaining, nodeAdd(split.right, seeds.right));
   }
 
   function addRemaining(node: Node) {

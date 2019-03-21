@@ -8,8 +8,17 @@ export interface Parent {
 }
 
 export function loadParentFn(path: Path) {
-  return function(): Parent {
-    if (path.length() < 2) return { entry: NULL_ENTRY, node: NULL_NODE };
-    else return { entry: <Entry>path.pop(), node: <Node>path.pop() };
+  return function(split?: Node): Parent {
+
+    if (split && path.length() >= 1)
+      return { entry: NULL_ENTRY, node: <Node>path.pop() };
+
+    if (path.length() >= 2) {
+      const entry = <Entry>path.pop();
+      const node = <Node>path.pop();
+      return { entry: entry, node: node };
+    }
+
+    return { entry: NULL_ENTRY, node: NULL_NODE };
   };
 }

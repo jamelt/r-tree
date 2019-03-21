@@ -16,12 +16,14 @@ export interface Path {
 export function pathCreate(): Path {
   let sequence: Element[] = [];
   let currentIndex = -1;
+  let preservedRoot: Node | undefined;
 
   const instance = {};
 
   function push(element: Element): Path {
     sequence.push(element);
     currentIndex += 1;
+    if (currentIndex === 0) preservedRoot = <Node> element;
     return <Path>instance;
   }
 
@@ -36,11 +38,11 @@ export function pathCreate(): Path {
   }
 
   function isRoot(node: Node) {
-    return sequence.length > 0 && node === sequence[0];
+    return node !== undefined && node === root();
   }
 
   function root(): Node {
-    return <Node>sequence[0];
+    return <Node>sequence[0] || preservedRoot;
   }
 
   const length = () => sequence.length;

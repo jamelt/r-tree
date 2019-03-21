@@ -48,12 +48,14 @@ export function nodeEntriesAvailable(specification: Specification, node: Node) {
   return node.entries.length < specification.maxEntries;
 }
 
-export function nodeAdd(node: Node, entry: Entry): void {
+export function nodeAdd(node: Node, entry: Entry): Entry {
   node.entries.push(entry);
+  return entry;
 }
 
-export function nodeRemove(node: Node, entry: Entry): void {
+export function nodeRemove(node: Node, entry: Entry): Entry {
   removeValue(node.entries, entry);
+  return entry;
 }
 
 export function nodeDeficit(node: Node, specification: Specification) {

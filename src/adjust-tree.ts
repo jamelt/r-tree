@@ -1,4 +1,4 @@
-import { entryCreate } from './entry';
+import { entryCreate, NULL_ENTRY } from './entry';
 import { Node, nodeAdd, nodeEntriesAvailable, nodeRegion } from './node';
 import { loadParentFn, Parent } from './parent';
 import { Path } from './path';
@@ -25,7 +25,7 @@ export function adjustTree(
   const loadParent = loadParentFn(path);
 
   function parentEnlarge(): void {
-    if (parent.entry === undefined) return;
+    if (parent.entry === undefined || parent.entry === NULL_ENTRY) return;
     parent.entry.region = regionEnlarge(nodeRegion(node), parent.entry.region);
   }
 
@@ -42,7 +42,7 @@ export function adjustTree(
     }
   }
 
-  let parent: Parent = loadParent();
+  let parent: Parent = loadParent(split);
   while (!path.isRoot(node)) {
     parentEnlarge();
     split = propagateSplit();
