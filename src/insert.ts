@@ -20,12 +20,17 @@ export function insert(
   const path = pathCreate();
   const leaf = chooseLeaf(path, node, entry);
 
+  let adjustment: RootAdjustment;
+
   if (nodeEntriesAvailable(specification, leaf)) {
     nodeAdd(leaf, entry);
+    adjustment = adjustTree(specification, path, leaf);
   } else {
-    const split = splitNode(specification, leaf, entry);
-    return growTree(adjustTree(specification, path, split.left, split.right));
+    const { left, right } = splitNode(specification, leaf, entry);
+    adjustment = adjustTree(specification, path, left, right);
   }
+
+  return growTree(adjustment);
 }
 
 function growTree(adjustment: RootAdjustment): Node | void {

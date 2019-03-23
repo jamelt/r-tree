@@ -42,7 +42,7 @@ export function adjustTree(
     }
   }
 
-  let parent: Parent = loadParent(split);
+  let parent: Parent = loadParent();
   while (!path.isRoot(node)) {
     parentEnlarge();
     split = propagateSplit();

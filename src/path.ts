@@ -16,14 +16,14 @@ export interface Path {
 export function pathCreate(): Path {
   let sequence: Element[] = [];
   let currentIndex = -1;
-  let preservedRoot: Node | undefined;
+  let pathRoot: Node | undefined;
 
   const instance = {};
 
   function push(element: Element): Path {
     sequence.push(element);
     currentIndex += 1;
-    if (currentIndex === 0) preservedRoot = <Node> element;
+    if (currentIndex === 0) pathRoot = <Node>element;
     return <Path>instance;
   }
 
@@ -42,12 +42,13 @@ export function pathCreate(): Path {
   }
 
   function root(): Node {
-    return <Node>sequence[0] || preservedRoot;
+    return <Node>sequence[0] || pathRoot;
   }
 
   const length = () => sequence.length;
 
   return Object.freeze(
-    mixinDeep(instance, { push, pop, value, length, isRoot, root })
+    mixinDeep(instance, { push, pop, value, length, isRoot, root,
+    /* used for debugging, remove before release */ sequence })
   );
 }
