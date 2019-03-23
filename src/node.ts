@@ -1,6 +1,6 @@
 import { Id } from './data-types';
 import { Entry, LeafEntry } from './entry';
-import { Region, regionEnlarge } from './region';
+import { Region, regionEnlarge, regionCreate } from './region';
 import { Specification } from './specification';
 import { removeValue } from './utils';
 
@@ -67,10 +67,14 @@ export function nodeClear(node: Node) {
 }
 
 export function nodeRegion(node: Node): Region {
-  return node.entries.reduce((region, entry) => {
-    const argList = [entry.region, region ? region : undefined];
-    return regionEnlarge.apply(null, argList);
-  }, null);
+  let region: Region = regionCreate();
+  
+  node.entries.forEach((entry, i) => {
+    region = i === 0 ? entry.region : region;
+    region = regionEnlarge(region, entry.region);
+  });
+  
+  return region;
 }
 
 export function nodeFind(node: LeafNode, id: Id): LeafEntry | undefined {

@@ -67,8 +67,7 @@ export function splitNode(
 
   function assignNext() {
     const { node, entry } = algorithm.pickNext(remaining, split);
-    nodeAdd(node, entry);
-    removeValue(remaining, entry);
+    removeValue(remaining, nodeAdd(node, entry));
   }
 
   const { algorithm } = specification;
