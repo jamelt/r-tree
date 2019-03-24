@@ -19,6 +19,9 @@ test('search', () => {
 
   results = rtree.search({ min: [0, 0], max: [100, 100] });
   expect(results).toHaveLength(7);
+  expect(results).toContain('c');
+  expect(results).toContain('d');
+  expect(results).toContain('f');
 
   console.log(results);
 });
