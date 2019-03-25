@@ -1,6 +1,6 @@
 import { Id } from './data-types';
-import { Entry, LeafEntry } from './entry';
-import { Node, NULL_NODE } from './node';
+import { Entry } from './entry';
+import { Node } from './node';
 import { Region, regionOverlaps } from './region';
 import { flatten } from './utils';
 
@@ -23,15 +23,13 @@ function find(node: Node, region: Region): Found {
   const overlapping = entries<Entry>(node, region);
 
   return overlapping.reduce((findResult, entry) => {
-    const id: Id = (<LeafEntry>entry).id;
+    const id: Id = (<any>entry).id;
     const child: Node = entry.child;
 
-    if (id !== undefined) {
+    if (id) {
       findResult.ids.push(id);
-    } else if (child !== NULL_NODE && child !== undefined) {
-      findResult.children.push(child);
     } else {
-      throw new Error('unaccounted find use case');
+      findResult.children.push(child);
     }
 
     return findResult;
