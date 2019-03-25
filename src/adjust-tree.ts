@@ -1,4 +1,4 @@
-import { createDebugFn } from './debug';
+// import { createDebugFn } from './debug';
 import { entryCreate, NULL_ENTRY } from './entry';
 import { Node, nodeAdd, nodeEntriesAvailable, nodeRegion } from './node';
 import { loadParentFn, Parent } from './parent';
@@ -45,16 +45,16 @@ export function adjustTree(
     }
   }
 
-  const debug = createDebugFn(() => path.root());
+  // const debug = createDebugFn(() => path.root());
 
   let parent: Parent = loadParent();
-  debug();
+  // debug();
   while (!path.isRoot(node)) {
     parentEnlarge();
     split = propagateSplit();
     node = parent.node;
     parent = loadParent();
-    debug();
+    // debug();
   }
 
   return rootAdjustmentCreate(node, split);
