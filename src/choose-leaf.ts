@@ -20,7 +20,7 @@ export function chooseLeaf(path: Path, node: Node, ref: LeafEntry): LeafNode {
 
 function leastEnlargement(entries: Entry[], ref: LeafEntry): Entry {
   let least = entries[0];
-  let growth = Number.MAX_VALUE;
+  let growth = Number.POSITIVE_INFINITY;
 
   entries.forEach(entry => {
     const combined = regionArea(regionEnlarge(ref.region, entry.region));
