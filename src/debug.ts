@@ -7,7 +7,7 @@ export function createDebugFn(
 ): Function {
   return () => {
     console.log(
-      inspect(rootGetter(), { depth: 25 }) + '\n' + separatorChar.repeat(100)
+      inspect(rootGetter(), { depth: 50 }) + '\n' + separatorChar.repeat(100)
     );
   };
 }
