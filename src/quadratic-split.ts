@@ -13,7 +13,7 @@ import {
 export function quadraticSplitAlgorithm(): SplitAlgorithm {
   function pickSeeds(remaining: Entry[]): Seeds {
     let seeds = seedsCreate();
-    let worst = Number.MIN_VALUE;
+    let worst = Number.NEGATIVE_INFINITY;
 
     remaining.forEach((x, i) => {
       remaining.slice(i + 1).forEach(y => {
@@ -33,7 +33,7 @@ export function quadraticSplitAlgorithm(): SplitAlgorithm {
 
   function pickNext(remaining: Entry[], split: Split): SplitAssignment {
     let assignment = splitAssignmentCreate();
-    let growth = Number.MIN_VALUE;
+    let growth = Number.NEGATIVE_INFINITY;
 
     remaining.forEach(entry => {
       split.toArray().forEach(node => {
