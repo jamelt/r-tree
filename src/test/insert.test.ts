@@ -1,5 +1,5 @@
-import { createDebugFn } from '../debug';
 import RTree from '../r-tree';
+import { createDebugFn } from '../debug';
 import { data, generateDataEntry } from './data';
 
 test('insert', () => {
@@ -14,13 +14,16 @@ test('insert', () => {
 });
 
 test('insert-stress', () => {
-  const rtree = RTree({ minEntries: 50, maxEntries: 100 });
+  const rtree = RTree({ minEntries: 1, maxEntries: 4 });
   const debug = createDebugFn(() => rtree.inspect(), '*');
+  const count = 50;
+  const space = 100;
+  const debugCount = 5;
 
   let entry;
-  for (let i = 0; i < 1000; i++) {
-    entry = generateDataEntry(2, 1000);
+  for (let i = 0; i < count; i++) {
+    entry = generateDataEntry(2, space);
     rtree.insert(entry.id, entry.region);
-    if (i % 100 === 0) debug();
+    if (i % (count / debugCount) === 0) debug();
   }
 });
