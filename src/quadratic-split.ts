@@ -1,14 +1,7 @@
 import { Entry } from './entry';
-import { nodeRegion } from './node';
+import { nodeRegion, Node } from './node';
 import { regionArea, regionEnlarge } from './region';
-import {
-  Seeds,
-  seedsCreate,
-  Split,
-  SplitAlgorithm,
-  SplitAssignment,
-  splitAssignmentCreate
-} from './split';
+import { Seeds, seedsCreate, Split, SplitAlgorithm, SplitAssignment, splitAssignmentCreate } from './split';
 
 export function quadraticSplitAlgorithm(): SplitAlgorithm {
   function pickSeeds(remaining: Entry[]): Seeds {
@@ -34,9 +27,10 @@ export function quadraticSplitAlgorithm(): SplitAlgorithm {
   function pickNext(remaining: Entry[], split: Split): SplitAssignment {
     let assignment = splitAssignmentCreate();
     let growth = Number.NEGATIVE_INFINITY;
+    let nodes = split.toArray();
 
     remaining.forEach(entry => {
-      split.toArray().forEach(node => {
+      nodes.forEach(node => {
         const region = nodeRegion(node);
         const combined = regionEnlarge(region, entry.region);
         const diff = regionArea(combined) - regionArea(region);
@@ -45,11 +39,23 @@ export function quadraticSplitAlgorithm(): SplitAlgorithm {
           assignment.entry = entry;
           assignment.node = node;
           growth = diff;
+        } else if (diff === growth) {
+          assignment.node = tieBreaker(split);
         }
       });
     });
 
     return assignment;
+  }
+
+  function tieBreaker({ left, right }: Split): Node {
+    const leftArea = regionArea(nodeRegion(left));
+    const rightArea = regionArea(nodeRegion(right));
+    if (leftArea === rightArea) {
+      return left.entries.length < right.entries.length ? left : right;
+    } else {
+      return leftArea < rightArea ? left : right;
+    }
   }
 
   return {
