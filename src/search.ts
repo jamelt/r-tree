@@ -1,50 +1,27 @@
 import { Id } from './data-types';
-import { Entry } from './entry';
-import { Node } from './node';
+import { Node, NULL_NODE } from './node';
 import { Region, regionOverlaps } from './region';
 
-interface SearchState {
-  processQueue: Node[];
-  results: Id[];
-  workRemaining(): boolean;
-  next(): Node | undefined;
-}
+export function search(subtree: Node, region: Region): Id[] {
+  const processQueue: Node[] = [subtree];
+  const results: Id[] = [];
 
-function searchStateCreate(initial?: Node): SearchState {
-  const instance = {
-    processQueue: initial === undefined ? [] : [initial],
-    results: [],
-    workRemaining: () => instance.processQueue.length > 0,
-    next: () => instance.processQueue.shift()
-  };
-  return instance;
-}
+  while (processQueue.length > 0) {
+    const node = processQueue.shift() || NULL_NODE;
+    const entries = node.entries;
 
-export function search(node: Node, region: Region): Id[] {
-  const state = searchStateCreate(node);
+    for (let i = 0; i < entries.length; i++) {
+      const entry: any = entries[i];
 
-  while (state.workRemaining()) {
-    find(state, region);
+      if (!regionOverlaps(entry.region, region)) continue;
+
+      if (entry.id) {
+        results.push(entry.id);
+      } else {
+        processQueue.push(entry.child);
+      }
+    }
   }
 
-  return state.results;
-}
-
-function find(state: SearchState, region: Region): void {
-  const node = state.next();
-  if (node === undefined) return;
-  return overlapping(node, region).forEach((entry) => {
-    const id: Id = (<any>entry).id;
-    const child: Node = entry.child;
-
-    if (id) {
-      state.results.push(id);
-    } else {
-      state.processQueue.push(child);
-    }
-  });
-}
-
-function overlapping(node: Node, region: Region): Entry[] {
-  return node.entries.filter((entry) => regionOverlaps(entry.region, region));
+  return results;
 }

@@ -37,64 +37,6 @@ export function isObject(val: any): boolean {
   );
 }
 
-export function flatten<T>(array: T[]): T[] {
-  if (!Array.isArray(array)) {
-    throw new TypeError('Expected value to be an array');
-  }
-
-  return flattenFrom(array);
-}
-
-function flattenFrom<T>(array: T[]): T[] {
-  return flattenDown(array, []);
-}
-
-export function flattenDepth<T>(array: T[], depth: number) {
-  if (!Array.isArray(array)) {
-    throw new TypeError('Expected value to be an array');
-  }
-
-  return flattenFromDepth(array, depth);
-}
-
-function flattenFromDepth<T>(array: T[], depth: number): T[] {
-  if (typeof depth !== 'number') {
-    throw new TypeError('Expected the depth to be a number');
-  }
-
-  return flattenDownDepth(array, [], depth);
-}
-
-function flattenDown<T>(array: T[], result: T[]): T[] {
-  for (let i = 0; i < array.length; i++) {
-    const value = array[i];
-
-    if (Array.isArray(value)) {
-      flattenDown(value, result);
-    } else {
-      result.push(value);
-    }
-  }
-
-  return result;
-}
-
-function flattenDownDepth<T>(array: T[], result: T[], depth: number): T[] {
-  depth--;
-
-  for (let i = 0; i < array.length; i++) {
-    const value = array[i];
-
-    if (depth > -1 && Array.isArray(value)) {
-      flattenDownDepth(value, result, depth);
-    } else {
-      result.push(value);
-    }
-  }
-
-  return result;
-}
-
 export function removeValue<T>(array: T[], value: T, count?: number): T[] {
   let index;
   let i = 0;

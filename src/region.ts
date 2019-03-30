@@ -23,9 +23,9 @@ export function regionAssertSameDimensions(x: Region, y?: Region): number {
 }
 
 export function regionArea(region: Region): number {
+  const dimensions = regionDimensions(region);
   let area = 1.0;
-  for (let i = 0; i < regionDimensions(region); i++)
-    area *= region.max[i] - region.min[i];
+  for (let i = 0; i < dimensions; i++) area *= region.max[i] - region.min[i];
   return area;
 }
 
@@ -48,7 +48,7 @@ export function regionCreate(): Region {
 export function regionEnlarge(x: Region, y?: Region): Region {
   if (y == null) return x;
   const dimensions = regionAssertSameDimensions(x, y);
-  let enlargement: Region = regionCreate();
+  const enlargement: Region = regionCreate();
   for (let i = 0; i < dimensions; i++) {
     enlargement.min.push(Math.min(x.min[i], y.min[i]));
     enlargement.max.push(Math.max(x.max[i], y.max[i]));

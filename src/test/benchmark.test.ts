@@ -1,6 +1,8 @@
 import RTree from '../r-tree';
 import { DataEntry, generateDataEntry } from './data';
 import * as RBush from 'rbush';
+// @ts-ignore
+import Flatbush = require('flatbush');
 
 interface RBushEntry {
   minX: number;
@@ -27,6 +29,7 @@ const rBushEntries: RBushEntry[] = [];
 
 let rtree = RTree();
 let rbush = RBush();
+let flatbush = new Flatbush(1);
 
 describe(`benchmark (${stressCount} items)`, () => {
   beforeAll(() => {
@@ -37,7 +40,9 @@ describe(`benchmark (${stressCount} items)`, () => {
       rBushEntries.push(entryRBush);
     }
 
-    rtree = RTree({ minEntries: 5, maxEntries: 9 });
+    rtree = RTree({ minEntries: 25, maxEntries: 50 });
+    rbush = RBush(50);
+    flatbush = new Flatbush(stressCount);
   });
 
   test('r-tree > insert', () => {
@@ -60,6 +65,17 @@ describe(`benchmark (${stressCount} items)`, () => {
       maxX: range,
       maxY: range
     });
+    expect(results).toHaveLength(stressCount);
+  });
+
+  test('flatbush > insert', () => {
+    for (const entry of rBushEntries)
+      flatbush.add(entry.minX, entry.minY, entry.maxX, entry.maxY);
+    flatbush.finish();
+  });
+
+  test('flatbush > search', () => {
+    const results = flatbush.search(0, 0, range, range);
     expect(results).toHaveLength(stressCount);
   });
 });
