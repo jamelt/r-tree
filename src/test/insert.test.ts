@@ -28,12 +28,6 @@ describe('insert', () => {
     });
 
     let results = rtree.search({ min: [0, 0], max: [range, range] });
-    console.log(results.length);
     expect(results).toHaveLength(stressCount);
-    const start = new Date();
-    results = rtree.search({ min: [0, 0], max: [100, 100] });
-    const elapsed = new Date().getTime() - start.getTime();
-    console.log('elapsed: ' + elapsed);
-    console.log(results.length);
   });
 });
