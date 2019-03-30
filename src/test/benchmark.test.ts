@@ -22,8 +22,8 @@ function rBushEntry(entry: DataEntry): RBushEntry {
   };
 }
 
-const stressCount: number = 10000;
-const range = stressCount * 10;
+const stressCount: number = 500;
+const range = stressCount * 2;
 const dataEntries: DataEntry[] = [];
 const rBushEntries: RBushEntry[] = [];
 
@@ -40,8 +40,8 @@ describe(`benchmark (${stressCount} items)`, () => {
       rBushEntries.push(entryRBush);
     }
 
-    rtree = RTree({ minEntries: 25, maxEntries: 50 });
-    rbush = RBush(50);
+    rtree = RTree({ minEntries: (0.4*16), maxEntries: 16 });
+    rbush = RBush(16);
     flatbush = new Flatbush(stressCount);
   });
 
