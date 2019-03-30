@@ -51,7 +51,7 @@ export function splitNode(
   node: Node,
   entry: Entry
 ): Split {
-  function needsRemaining(node: Node) {
+  function needsRemaining(node: Node): boolean {
     return nodeDeficit(node, specification) >= remaining.length;
   }
 
@@ -65,7 +65,16 @@ export function splitNode(
     remaining.splice(0).forEach(entry => nodeAdd(node, entry));
   }
 
-  function assignNext() {
+  function fillRemaining(): boolean {
+    return split.toArray().reduce((filled: boolean, node: Node) => {
+      if (filled) return true;
+      if (!needsRemaining(node)) return false;
+      addRemaining(node);
+      return true;
+    }, false);
+  }
+  
+  function assignNext(): void {
     const { node, entry } = algorithm.pickNext(remaining, split);
     removeValue(remaining, nodeAdd(node, entry));
   }
@@ -77,10 +86,7 @@ export function splitNode(
   assignSeeds();
 
   while (remaining.length) {
-    split.toArray().forEach(node => {
-      if (needsRemaining(node)) addRemaining(node);
-    });
-
+    if (fillRemaining()) continue;
     assignNext();
   }
 

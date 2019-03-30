@@ -36,7 +36,7 @@ export function generateId(): Id {
   return randomString.generate({
     charset: 'alphabetic',
     capitalization: 'lowercase',
-    length: 5
+    length: 7
   });
 }
 

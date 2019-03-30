@@ -32,15 +32,17 @@ export function quadraticSplitAlgorithm(): SplitAlgorithm {
     remaining.forEach(entry => {
       nodes.forEach(node => {
         const region = nodeRegion(node);
+        const area = regionArea(region);
         const combined = regionEnlarge(region, entry.region);
-        const diff = regionArea(combined) - regionArea(region);
+        const diff = regionArea(combined) - area;
 
         if (diff > growth) {
           assignment.entry = entry;
           assignment.node = node;
           growth = diff;
         } else if (diff === growth) {
-          assignment.node = tieBreaker(split);
+          assignment.entry = entry;
+          assignment.node = tieBreaker(split, node, area);
         }
       });
     });
@@ -48,13 +50,13 @@ export function quadraticSplitAlgorithm(): SplitAlgorithm {
     return assignment;
   }
 
-  function tieBreaker({ left, right }: Split): Node {
-    const leftArea = regionArea(nodeRegion(left));
-    const rightArea = regionArea(nodeRegion(right));
-    if (leftArea === rightArea) {
-      return left.entries.length < right.entries.length ? left : right;
+  function tieBreaker(split: Split, current: Node, currentArea: number): Node {
+    const other = current === split.left ? split.right : split.left;
+    const otherArea = regionArea(nodeRegion(other));
+    if (currentArea === otherArea) {
+      return current.entries.length < other.entries.length ? current : other;
     } else {
-      return leftArea < rightArea ? left : right;
+      return currentArea < otherArea ? current : other;
     }
   }
 

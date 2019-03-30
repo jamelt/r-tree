@@ -26,7 +26,7 @@ export function adjustTree(
   const loadParent = loadParentFn(path);
 
   function parentEnlarge(): void {
-    if (parent.entry === undefined || parent.entry === NULL_ENTRY) return;
+    if (parent.entry === NULL_ENTRY || parent.entry === undefined) return;
     parent.entry.region = regionEnlarge(nodeRegion(node), parent.entry.region);
   }
 
