@@ -1,44 +1,39 @@
 import RTree from '../r-tree';
-// import { createDebugFn } from '../debug';
-import { data, generateDataEntry } from './data';
+import { data, DataEntry, generateDataEntry } from './data';
+
+const stressCount: number = 10000;
+const range = stressCount * 10;
+const entries: DataEntry[] = [];
 
 describe('insert', () => {
+  beforeAll(() => {
+    for (let i = 0; i < stressCount; i++)
+      entries.push(generateDataEntry(2, range));
+  });
+
   test('stock', () => {
     const rtree = RTree({ minEntries: 1, maxEntries: 2 });
-    // const debug = createDebugFn(() => rtree.inspect(), '*');
-  
-    Object.keys(data).forEach(key => {
+
+    Object.keys(data).forEach((key) => {
       const entry = data[key];
       rtree.insert(entry.id, entry.region);
-      // debug();
     });
   });
-  
+
   test('stress', () => {
     const rtree = RTree({ minEntries: 5, maxEntries: 9 });
-    // const debug = createDebugFn(() => rtree.inspect(), '*');
-    const count = 1000;
-    const range = count * 10;
-    // const debugCount = 2;
-  
-    let entry;
-    for (let i = 0; i < count; i++) {
-      entry = generateDataEntry(2, range);
-      rtree.insert(entry.id, entry.region);
-      // if (i % (count / debugCount) === 0) debug();
-    }
-    
-    const results = rtree.search({ min: [0, 0], max: [ range, range] });
-    console.log(results.length);
-    expect(results).toHaveLength(count);
-  });
-});
 
-describe('stress', () => {
-  let entries: DataEntry[] = ]\
-  
-  beforeAll(() => {
-    entries.push
-  })
-  
+    entries.forEach((entry, i) => {
+      rtree.insert(entry.id, entry.region);
+    });
+
+    let results = rtree.search({ min: [0, 0], max: [range, range] });
+    console.log(results.length);
+    expect(results).toHaveLength(stressCount);
+    const start = new Date();
+    results = rtree.search({ min: [0, 0], max: [100, 100] });
+    const elapsed = new Date().getTime() - start.getTime();
+    console.log('elapsed: ' + elapsed);
+    console.log(results.length);
+  });
 });

@@ -22,7 +22,7 @@ function leastEnlargement(entries: Entry[], ref: LeafEntry): Entry {
   let least = entries[0];
   let growth = Number.POSITIVE_INFINITY;
 
-  entries.forEach(entry => {
+  entries.forEach((entry) => {
     const combined = regionArea(regionEnlarge(ref.region, entry.region));
     const diff = regionArea(ref.region) - combined;
 

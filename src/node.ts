@@ -68,18 +68,18 @@ export function nodeClear(node: Node) {
 
 export function nodeRegion(node: Node): Region {
   let region: Region = regionCreate();
-  
+
   node.entries.forEach((entry, i) => {
     region = i === 0 ? entry.region : region;
     region = regionEnlarge(region, entry.region);
   });
-  
+
   return region;
 }
 
 export function nodeFind(node: LeafNode, id: Id): LeafEntry | undefined {
   let found: LeafEntry | undefined;
-  node.entries.some(entry => {
+  node.entries.some((entry) => {
     const matches = entry.id === id;
     if (matches) found = entry;
     return entry.id === id;

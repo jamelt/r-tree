@@ -48,7 +48,14 @@ export function pathCreate(): Path {
   const length = () => sequence.length;
 
   return Object.freeze(
-    mixinDeep(instance, { push, pop, value, length, isRoot, root,
-    /* used for debugging, remove before release */ sequence })
+    mixinDeep(instance, {
+      push,
+      pop,
+      value,
+      length,
+      isRoot,
+      root,
+      /* used for debugging, remove before release */ sequence
+    })
   );
 }

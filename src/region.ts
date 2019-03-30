@@ -14,8 +14,8 @@ export function regionAssertSameDimensions(x: Region, y?: Region): number {
   } else {
     assert(
       x.min.length === x.max.length &&
-      x.min.length === y.min.length &&
-      x.min.length === x.max.length,
+        x.min.length === y.min.length &&
+        x.min.length === x.max.length,
       'Regions must have same dimensions.'
     );
   }

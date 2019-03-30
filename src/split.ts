@@ -1,5 +1,12 @@
 import { Entry, NULL_ENTRY } from './entry';
-import { Node, nodeAdd, nodeClear, nodeCreate, nodeDeficit, NULL_NODE } from './node';
+import {
+  Node,
+  nodeAdd,
+  nodeClear,
+  nodeCreate,
+  nodeDeficit,
+  NULL_NODE
+} from './node';
 import { Specification } from './specification';
 import { removeValue } from './utils';
 
@@ -62,7 +69,7 @@ export function splitNode(
   }
 
   function addRemaining(node: Node) {
-    remaining.splice(0).forEach(entry => nodeAdd(node, entry));
+    remaining.splice(0).forEach((entry) => nodeAdd(node, entry));
   }
 
   function fillRemaining(): boolean {
@@ -73,7 +80,7 @@ export function splitNode(
       return true;
     }, false);
   }
-  
+
   function assignNext(): void {
     const { node, entry } = algorithm.pickNext(remaining, split);
     removeValue(remaining, nodeAdd(node, entry));

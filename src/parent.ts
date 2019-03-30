@@ -9,7 +9,6 @@ export interface Parent {
 
 export function loadParentFn(path: Path) {
   return function(): Parent {
-    
     if (path.length() % 2 == 1)
       return { entry: NULL_ENTRY, node: <Node>path.pop() };
 

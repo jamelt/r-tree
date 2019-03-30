@@ -16,17 +16,14 @@ export function findLeaf(
 ): FindLeafResult {
   path.push(node);
 
-  if (node.leaf)
-    findEntry(<LeafNode>node, id, result);
-
-  else
-    findNode(path, node, region, id, result);
+  if (node.leaf) findEntry(<LeafNode>node, id, result);
+  else findNode(path, node, region, id, result);
 
   return result;
 }
 
 function findEntry(leaf: LeafNode, id: Id, result: FindLeafResult) {
-  leaf.entries.some(entry => {
+  leaf.entries.some((entry) => {
     if (id === entry.id) result.leaf = leaf;
     return result.leaf !== undefined;
   });
@@ -39,7 +36,7 @@ function findNode(
   id: Id,
   result: FindLeafResult
 ) {
-  node.entries.some(entry => {
+  node.entries.some((entry) => {
     if (regionOverlaps(entry.region, region)) {
       path.push(entry);
       findLeaf(path, entry.child, id, region, result);

@@ -1,7 +1,14 @@
 import { Entry } from './entry';
 import { nodeRegion, Node } from './node';
 import { regionArea, regionEnlarge } from './region';
-import { Seeds, seedsCreate, Split, SplitAlgorithm, SplitAssignment, splitAssignmentCreate } from './split';
+import {
+  Seeds,
+  seedsCreate,
+  Split,
+  SplitAlgorithm,
+  SplitAssignment,
+  splitAssignmentCreate
+} from './split';
 
 export function quadraticSplitAlgorithm(): SplitAlgorithm {
   function pickSeeds(remaining: Entry[]): Seeds {
@@ -9,7 +16,7 @@ export function quadraticSplitAlgorithm(): SplitAlgorithm {
     let worst = Number.NEGATIVE_INFINITY;
 
     remaining.forEach((x, i) => {
-      remaining.slice(i + 1).forEach(y => {
+      remaining.slice(i + 1).forEach((y) => {
         const combined = regionArea(regionEnlarge(x.region, y.region));
         const diff = combined - regionArea(x.region) - regionArea(y.region);
 
@@ -29,8 +36,8 @@ export function quadraticSplitAlgorithm(): SplitAlgorithm {
     let growth = Number.NEGATIVE_INFINITY;
     let nodes = split.toArray();
 
-    remaining.forEach(entry => {
-      nodes.forEach(node => {
+    remaining.forEach((entry) => {
+      nodes.forEach((node) => {
         const region = nodeRegion(node);
         const area = regionArea(region);
         const combined = regionEnlarge(region, entry.region);

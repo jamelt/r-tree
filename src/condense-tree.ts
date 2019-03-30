@@ -28,13 +28,15 @@ export function condenseTree(
 
   const branchNodes = orphans.slice();
 
-  orphans.filter(node => node.leaf).forEach(node => {
-    removeValue(branchNodes, node);
-    const leaf = <LeafNode>node;
-    leaf.entries.forEach(entry => {
-      rtree.insert(entry.id, entry.region);
+  orphans
+    .filter((node) => node.leaf)
+    .forEach((node) => {
+      removeValue(branchNodes, node);
+      const leaf = <LeafNode>node;
+      leaf.entries.forEach((entry) => {
+        rtree.insert(entry.id, entry.region);
+      });
     });
-  });
 
   // TODO Figure out to do with these branch nodes. It's unclear.
 }

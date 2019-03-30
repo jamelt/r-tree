@@ -6,7 +6,7 @@ import { flatten } from './utils';
 
 export function search(node: Node, region: Region): Id[] {
   const found = find(node, region);
-  const results = found.children.map(node => search(node, region));
+  const results = found.children.map((node) => search(node, region));
   return [...found.ids, ...flatten(results)];
 }
 
@@ -38,5 +38,5 @@ function find(node: Node, region: Region): Found {
 
 function entries<T extends Entry>(node: Node, region: Region): T[] {
   const entries = <T[]>node.entries;
-  return entries.filter(entry => regionOverlaps(entry.region, region));
+  return entries.filter((entry) => regionOverlaps(entry.region, region));
 }

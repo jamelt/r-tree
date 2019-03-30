@@ -26,7 +26,8 @@
   "scripts": {
     "clean": "rm -rf dist/*",
     "build": "npx tsc",
-    "watch": "npx tsc -w"
+    "watch": "npx tsc -w",
+    "format": "npx prettier --write **/*.ts"
   },
   "devDependencies": {
     "@types/jest": "^24.0.11",
