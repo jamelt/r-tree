@@ -20,7 +20,7 @@ describe('insert', () => {
     });
   });
 
-  test('stress', () => {
+  test('bulk', () => {
     const rtree = RTree({ minEntries: 5, maxEntries: 9 });
 
     entries.forEach((entry, i) => {

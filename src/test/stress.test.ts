@@ -1,43 +1,32 @@
 import RTree from '../r-tree';
 import { DataEntry, generateDataEntry } from './data';
 import * as RBush from 'rbush';
+import { rbushEntry, RBushEntry } from './types';
+// @ts-ignore
+import Flatbush = require('flatbush');
 
-interface RBushEntry {
-  minX: number;
-  minY: number;
-  maxX: number;
-  maxY: number;
-  [property: string]: any;
-}
 
-function rBushEntry(entry: DataEntry): RBushEntry {
-  return {
-    minX: entry.region.min[0],
-    minY: entry.region.min[1],
-    maxX: entry.region.max[0],
-    maxY: entry.region.max[1],
-    ...entry
-  };
-}
-
-const stressCount: number = 10000;
-const range = stressCount * 10;
+const stressCount: number = 100000;
+const range = stressCount * 2;
 const dataEntries: DataEntry[] = [];
-const rBushEntries: RBushEntry[] = [];
+const rbushEntries: RBushEntry[] = [];
 
 let rtree = RTree();
 let rbush = RBush();
+let flatbush = new Flatbush(1);
 
-describe(`benchmark (${stressCount} items)`, () => {
+describe(`stress (${stressCount} items)`, () => {
   beforeAll(() => {
     for (let i = 0; i < stressCount; i++) {
       const entryRTree = generateDataEntry(2, range);
-      const entryRBush = rBushEntry(entryRTree);
+      const entryRBush = rbushEntry(entryRTree);
       dataEntries.push(entryRTree);
-      rBushEntries.push(entryRBush);
+      rbushEntries.push(entryRBush);
     }
 
-    rtree = RTree({ minEntries: 5, maxEntries: 9 });
+    rtree = RTree({ minEntries: 5, maxEntries: 16 });
+    rbush = RBush(16);
+    flatbush = new Flatbush(stressCount);
   });
 
   test('r-tree > insert', () => {
@@ -50,7 +39,7 @@ describe(`benchmark (${stressCount} items)`, () => {
   });
 
   test('rbush > insert', () => {
-    rBushEntries.forEach((entry) => rbush.insert(entry));
+    rbushEntries.forEach((entry) => rbush.insert(entry));
   });
 
   test('rbush > search', () => {
@@ -60,6 +49,17 @@ describe(`benchmark (${stressCount} items)`, () => {
       maxX: range,
       maxY: range
     });
+    expect(results).toHaveLength(stressCount);
+  });
+
+  test('flatbush > insert', () => {
+    for (const entry of rbushEntries)
+      flatbush.add(entry.minX, entry.minY, entry.maxX, entry.maxY);
+    flatbush.finish();
+  });
+
+  test('flatbush > search', () => {
+    const results = flatbush.search(0, 0, range, range);
     expect(results).toHaveLength(stressCount);
   });
 });
