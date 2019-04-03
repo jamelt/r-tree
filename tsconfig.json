@@ -11,6 +11,6 @@
     "noUnusedLocals": true,
     "declaration": true
   },
-  "include": ["src/**/*"],
+  "include": ["src/**/*", "src/**/*.d.ts"],
   "exclude": ["**/*.test.ts", "**/*.fixture.ts"]
 }
