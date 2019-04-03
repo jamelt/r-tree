@@ -1,26 +1,9 @@
+import * as RBush from 'rbush';
 import RTree from '../r-tree';
 import { DataEntry, generateDataEntry } from './data';
-import * as RBush from 'rbush';
-// @ts-ignore
+import { rbushEntry, RBushEntry } from './types';
 import Flatbush = require('flatbush');
 
-interface RBushEntry {
-  minX: number;
-  minY: number;
-  maxX: number;
-  maxY: number;
-  [property: string]: any;
-}
-
-function rBushEntry(entry: DataEntry): RBushEntry {
-  return {
-    minX: entry.region.minX,
-    minY: entry.region.minY,
-    maxX: entry.region.maxX,
-    maxY: entry.region.maxY,
-    ...entry
-  };
-}
 
 const stressCount: number = 100000;
 const range = stressCount * 2;
@@ -35,7 +18,7 @@ describe(`benchmark (${stressCount} items)`, () => {
   beforeAll(() => {
     for (let i = 0; i < stressCount; i++) {
       const entryRTree = generateDataEntry(2, range);
-      const entryRBush = rBushEntry(entryRTree);
+      const entryRBush = rbushEntry(entryRTree);
       dataEntries.push(entryRTree);
       rBushEntries.push(entryRBush);
     }
