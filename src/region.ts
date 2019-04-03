@@ -1,57 +1,46 @@
 import { assert } from './utils';
 
 export interface Region {
-  min: number[];
-  max: number[];
-}
-
-export function regionAssertSameDimensions(x: Region, y?: Region): number {
-  if (y === undefined) {
-    assert(
-      x.min.length === x.max.length,
-      'Region must have same min and max length'
-    );
-  } else {
-    assert(
-      x.min.length === x.max.length &&
-        x.min.length === y.min.length &&
-        x.min.length === x.max.length,
-      'Regions must have same dimensions.'
-    );
+  min: {
+    x: number;
+    y: number;
+  },
+  max: {
+    x: number;
+    y: number;
   }
-  return x.min.length;
 }
 
 export function regionArea(region: Region): number {
-  let area = 1.0;
-  for (let i = 0; i < regionDimensions(region); i++)
-    area *= region.max[i] - region.min[i];
-  return area;
+  return (max.x-min.x)*(max.y-min.y);
 }
 
-export function regionDimensions(region: Region) {
-  regionAssertSameDimensions(region);
-  return region.min.length;
-}
 
-export function regionOverlaps(x: Region, y: Region): boolean {
-  const dimensions = regionAssertSameDimensions(x, y);
-  for (let i = 0; i < dimensions; i++)
-    if (x.min[i] > y.max[i] || x.max[i] < y.min[i]) return false;
-  return true;
+export function regionOverlaps(a: Region, b: Region): boolean {
+  return b.min.x <= a.max.x &&
+         b.min.y <= a.max.y &&
+         b.max.x >= a.min.x &&
+         b.max.y >= a.min.y;
 }
 
 export function regionCreate(): Region {
-  return { min: [], max: [] };
+  return {
+    min: {
+      x: null,
+      y: null,
+    },
+    max: {
+      x: null,
+      y: null
+    }
+  }
 }
 
-export function regionEnlarge(x: Region, y?: Region): Region {
-  if (y == null) return x;
-  const dimensions = regionAssertSameDimensions(x, y);
-  let enlargement: Region = regionCreate();
-  for (let i = 0; i < dimensions; i++) {
-    enlargement.min.push(Math.min(x.min[i], y.min[i]));
-    enlargement.max.push(Math.max(x.max[i], y.max[i]));
-  }
-  return enlargement;
+export function regionEnlarge(a: Region, b?: Region): Region {
+  if (b == null) return a;
+  a.min.x = Math.min(a.min.x, b.min.x);
+  a.min.y = Math.min(a.min.y, b.min.y);
+  a.max.x = Math.max(a.max.x, b.max.x);
+  a.max.y = Math.max(a.max.y, b.max.y);
+  return a;
 }
