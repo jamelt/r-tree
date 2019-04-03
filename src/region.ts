@@ -1,46 +1,29 @@
-import { assert } from './utils';
-
 export interface Region {
-  min: {
-    x: number;
-    y: number;
-  },
-  max: {
-    x: number;
-    y: number;
-  }
+  minX: number;
+  minY: number;
+  maxX: number;
+  maxY: number;
 }
 
 export function regionArea(region: Region): number {
-  return (max.x-min.x)*(max.y-min.y);
+  return (region.maxX - region.minX) * (region.maxY - region.minY);
 }
-
 
 export function regionOverlaps(a: Region, b: Region): boolean {
-  return b.min.x <= a.max.x &&
-         b.min.y <= a.max.y &&
-         b.max.x >= a.min.x &&
-         b.max.y >= a.min.y;
+  return (
+    b.minX <= a.maxX && b.minY <= a.maxY && b.maxX >= a.minX && b.maxY >= a.minY
+  );
 }
 
-export function regionCreate(): Region {
-  return {
-    min: {
-      x: null,
-      y: null,
-    },
-    max: {
-      x: null,
-      y: null
-    }
-  }
+export function regionCreate(minX = 0, minY = 0, maxX = 0, maxY = 0): Region {
+  return { minX, minY, maxX, maxY };
 }
 
 export function regionEnlarge(a: Region, b?: Region): Region {
   if (b == null) return a;
-  a.min.x = Math.min(a.min.x, b.min.x);
-  a.min.y = Math.min(a.min.y, b.min.y);
-  a.max.x = Math.max(a.max.x, b.max.x);
-  a.max.y = Math.max(a.max.y, b.max.y);
+  a.minX = Math.min(a.minX, b.minX);
+  a.minY = Math.min(a.minY, b.minY);
+  a.maxX = Math.max(a.maxX, b.maxX);
+  a.maxY = Math.max(a.maxY, b.maxY);
   return a;
 }

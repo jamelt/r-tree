@@ -1,6 +1,8 @@
 import RTree from '../r-tree';
 import { DataEntry, generateDataEntry } from './data';
 import * as RBush from 'rbush';
+// @ts-ignore
+import Flatbush = require('flatbush');
 
 interface RBushEntry {
   minX: number;
@@ -12,21 +14,22 @@ interface RBushEntry {
 
 function rBushEntry(entry: DataEntry): RBushEntry {
   return {
-    minX: entry.region.min[0],
-    minY: entry.region.min[1],
-    maxX: entry.region.max[0],
-    maxY: entry.region.max[1],
+    minX: entry.region.minX,
+    minY: entry.region.minY,
+    maxX: entry.region.maxX,
+    maxY: entry.region.maxY,
     ...entry
   };
 }
 
-const stressCount: number = 10000;
-const range = stressCount * 10;
+const stressCount: number = 100000;
+const range = stressCount * 2;
 const dataEntries: DataEntry[] = [];
 const rBushEntries: RBushEntry[] = [];
 
 let rtree = RTree();
 let rbush = RBush();
+let flatbush = new Flatbush(1);
 
 describe(`benchmark (${stressCount} items)`, () => {
   beforeAll(() => {
@@ -37,7 +40,9 @@ describe(`benchmark (${stressCount} items)`, () => {
       rBushEntries.push(entryRBush);
     }
 
-    rtree = RTree({ minEntries: 5, maxEntries: 9 });
+    rtree = RTree({ minEntries: 0.4 * 16, maxEntries: 16 });
+    rbush = RBush(16);
+    flatbush = new Flatbush(stressCount);
   });
 
   test('r-tree > insert', () => {
@@ -45,7 +50,12 @@ describe(`benchmark (${stressCount} items)`, () => {
   });
 
   test('r-tree > search', () => {
-    const results = rtree.search({ min: [0, 0], max: [range, range] });
+    const results = rtree.search({
+      minX: 0,
+      minY: 0,
+      maxX: range,
+      maxY: range
+    });
     expect(results).toHaveLength(stressCount);
   });
 
@@ -60,6 +70,17 @@ describe(`benchmark (${stressCount} items)`, () => {
       maxX: range,
       maxY: range
     });
+    expect(results).toHaveLength(stressCount);
+  });
+
+  test('flatbush > insert', () => {
+    for (const entry of rBushEntries)
+      flatbush.add(entry.minX, entry.minY, entry.maxX, entry.maxY);
+    flatbush.finish();
+  });
+
+  test('flatbush > search', () => {
+    const results = flatbush.search(0, 0, range, range);
     expect(results).toHaveLength(stressCount);
   });
 });
