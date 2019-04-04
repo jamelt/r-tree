@@ -10,9 +10,9 @@ export interface RBushEntry {
 
 export function rbushEntry(entry: DataEntry): RBushEntry {
   return {
-    minX: entry.region.min[0],
-    minY: entry.region.min[1],
-    maxX: entry.region.max[0],
-    maxY: entry.region.max[1]
+    minX: entry.region.minX,
+    minY: entry.region.minY,
+    maxX: entry.region.maxX,
+    maxY: entry.region.maxY,
   };
 }

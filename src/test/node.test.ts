@@ -8,6 +8,5 @@ test('nodeRegion', () => {
   nodeAdd(node, entryCreateLeaf(data.b.id, data.b.region));
   nodeAdd(node, entryCreateLeaf(data.c.id, data.c.region));
   const region = nodeRegion(node);
-  expect(region.min).toEqual([5, 5]);
-  expect(region.max).toEqual([75, 63]);
+  expect(region).toEqual({ minX: 5, minY: 5, maxX: 75, maxY: 63 });
 });

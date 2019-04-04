@@ -23,8 +23,8 @@ describe(`stress (${stressCount} items)`, () => {
       rbushEntries.push(entryRBush);
     }
 
-    rtree = RTree({ minEntries: 4, maxEntries: 9 });
-    rbush = RBush(9);
+    rtree = RTree({ minEntries: 0.4 * 16, maxEntries: 16 });
+    rbush = RBush(16);
     flatbush = new Flatbush(stressCount);
   });
 
@@ -33,7 +33,12 @@ describe(`stress (${stressCount} items)`, () => {
   });
 
   test('r-tree > search', () => {
-    const results = rtree.search({ min: [0, 0], max: [range, range] });
+    const results = rtree.search({
+      minX: 0,
+      minY: 0,
+      maxX: range,
+      maxY: range
+    });
     expect(results).toHaveLength(stressCount);
   });
 

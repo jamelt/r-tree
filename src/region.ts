@@ -1,57 +1,29 @@
-import { assert } from './utils';
-
 export interface Region {
-  min: number[];
-  max: number[];
-}
-
-export function regionAssertSameDimensions(x: Region, y?: Region): number {
-  if (y === undefined) {
-    assert(
-      x.min.length === x.max.length,
-      'Region must have same min and max length'
-    );
-  } else {
-    assert(
-      x.min.length === x.max.length &&
-      x.min.length === y.min.length &&
-      x.min.length === x.max.length,
-      'Regions must have same dimensions.'
-    );
-  }
-  return x.min.length;
+  minX: number;
+  minY: number;
+  maxX: number;
+  maxY: number;
 }
 
 export function regionArea(region: Region): number {
-  const dimensions = regionDimensions(region);
-  let area = 1.0;
-  for (let i = 0; i < dimensions; i++) area *= region.max[i] - region.min[i];
-  return area;
+  return (region.maxX - region.minX) * (region.maxY - region.minY);
 }
 
-export function regionDimensions(region: Region) {
-  regionAssertSameDimensions(region);
-  return region.min.length;
+export function regionOverlaps(a: Region, b: Region): boolean {
+  return (
+    b.minX <= a.maxX && b.minY <= a.maxY && b.maxX >= a.minX && b.maxY >= a.minY
+  );
 }
 
-export function regionOverlaps(x: Region, y: Region): boolean {
-  const dimensions = regionAssertSameDimensions(x, y);
-  for (let i = 0; i < dimensions; i++)
-    if (x.min[i] > y.max[i] || x.max[i] < y.min[i]) return false;
-  return true;
+export function regionCreate(minX = 0, minY = 0, maxX = 0, maxY = 0): Region {
+  return { minX, minY, maxX, maxY };
 }
 
-export function regionCreate(): Region {
-  return { min: [], max: [] };
-}
-
-export function regionEnlarge(x: Region, y?: Region): Region {
-  if (y == null) return x;
-  const dimensions = regionAssertSameDimensions(x, y);
-  const enlargement: Region = regionCreate();
-  for (let i = 0; i < dimensions; i++) {
-    enlargement.min.push(Math.min(x.min[i], y.min[i]));
-    enlargement.max.push(Math.max(x.max[i], y.max[i]));
-  }
-  return enlargement;
+export function regionEnlarge(a: Region, b?: Region): Region {
+  if (b == null) return a;
+  a.minX = Math.min(a.minX, b.minX);
+  a.minY = Math.min(a.minY, b.minY);
+  a.maxX = Math.max(a.maxX, b.maxX);
+  a.maxY = Math.max(a.maxY, b.maxY);
+  return a;
 }
