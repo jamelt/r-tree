@@ -13,7 +13,7 @@ let rtree = RTree();
 let rbush = RBush();
 let flatbush = new Flatbush(1);
 
-describe(`benchmark (${stressCount} items)`, () => {
+describe(`stress (${stressCount} items)`, () => {
   beforeAll(() => {
     for (let i = 0; i < stressCount; i++) {
       const entryRTree = generateDataEntry(2, range);
@@ -22,8 +22,8 @@ describe(`benchmark (${stressCount} items)`, () => {
       rbushEntries.push(entryRBush);
     }
 
-    rtree = RTree({ minEntries: 4, maxEntries: 9 });
-    rbush = RBush(9);
+    rtree = RTree();
+    rbush = RBush();
     flatbush = new Flatbush(stressCount);
   });
 
