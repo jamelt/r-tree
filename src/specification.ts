@@ -11,7 +11,7 @@ export interface Specification {
 export function defaultSpec(): Specification {
   return {
     minEntries: 2,
-    maxEntries: 5,
+    maxEntries: 4,
     algorithm: quadraticSplitAlgorithm()
   };
 }
