@@ -24,8 +24,8 @@ describe(`stress (${stressCount} items)`, () => {
       rbushEntries.push(entryRBush);
     }
 
-    rtree = RTree({ minEntries: 5, maxEntries: 16 });
-    rbush = RBush(16);
+    rtree = RTree();
+    rbush = RBush();
     flatbush = new Flatbush(stressCount);
   });
 
