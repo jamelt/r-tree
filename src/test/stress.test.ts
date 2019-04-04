@@ -9,7 +9,7 @@ import Flatbush = require('flatbush');
 const stressCount: number = 100000;
 const range = stressCount * 2;
 const dataEntries: DataEntry[] = [];
-const rBushEntries: RBushEntry[] = [];
+const rbushEntries: RBushEntry[] = [];
 
 let rtree = RTree();
 let rbush = RBush();
@@ -21,11 +21,11 @@ describe(`stress (${stressCount} items)`, () => {
       const entryRTree = generateDataEntry(2, range);
       const entryRBush = rbushEntry(entryRTree);
       dataEntries.push(entryRTree);
-      rBushEntries.push(entryRBush);
+      rbushEntries.push(entryRBush);
     }
 
-    rtree = RTree({ minEntries: 0.4 * 16, maxEntries: 16 });
-    rbush = RBush(16);
+    rtree = RTree();
+    rbush = RBush();
     flatbush = new Flatbush(stressCount);
   });
 
@@ -44,7 +44,7 @@ describe(`stress (${stressCount} items)`, () => {
   });
 
   test('rbush > insert', () => {
-    rBushEntries.forEach((entry) => rbush.insert(entry));
+    rbushEntries.forEach((entry) => rbush.insert(entry));
   });
 
   test('rbush > search', () => {
@@ -58,7 +58,7 @@ describe(`stress (${stressCount} items)`, () => {
   });
 
   test('flatbush > insert', () => {
-    for (const entry of rBushEntries)
+    for (const entry of rbushEntries)
       flatbush.add(entry.minX, entry.minY, entry.maxX, entry.maxY);
     flatbush.finish();
   });
