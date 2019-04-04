@@ -1,7 +1,6 @@
 import { Id } from './data-types';
-import { entryCreateLeaf } from './entry';
 import { insert as _insert } from './insert';
-import { nodeCreateLeaf, Node } from './node';
+import { Node, nodeCreate } from './node';
 import { Region } from './region';
 import { remove as _remove } from './remove';
 import { search as _search } from './search';
@@ -24,16 +23,15 @@ function Rtree(userSpecification?: Partial<Specification>): RTree {
 
   function initialize(): any {
     specification = specificationCreate(userSpecification);
-    root = nodeCreateLeaf();
     return {};
   }
 
   function insert(id: Id, region: Region) {
-    root = _insert(specification, root, entryCreateLeaf(id, region)) || root;
+    root = _insert(specification, root, nodeCreate(region, id)) || root;
   }
 
   function condense() {
-    if (!root.leaf && root.entries.length === 1) root = root.entries[0].child;
+    if (!root.leaf && root.entries.length === 1) root = root.entries[0];
   }
 
   function remove(id: Id, region: Region) {

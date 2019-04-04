@@ -1,36 +1,22 @@
-import { Entry, LeafEntry } from './entry';
-import { LeafNode, Node, NULL_NODE } from './node';
+import { Node } from './node';
 import { Path } from './path';
 import { regionArea, regionEnlarge } from './region';
-import { error } from './utils';
 
-export function chooseLeaf(
-  path: Path,
-  subtree: Node,
-  ref: LeafEntry
-): LeafNode {
+export function chooseLeaf(path: Path, subtree: Node, ref: Node): Node {
   const processQueue: Node[] = [subtree];
+  let node: Node;
 
   while (processQueue.length > 0) {
-    const node = processQueue.shift() || NULL_NODE;
-
+    node = processQueue.shift();
     path.push(node);
-
-    if (node.leaf) return <LeafNode>node;
-
-    const entry = leastEnlargement(node.entries, ref);
-
-    path.push(entry);
-
-    if (!entry.child) throw error('entry missing child');
-
-    processQueue.push(entry.child);
+    if (node.leaf) return node;
+    processQueue.push(leastEnlargement(node.entries, ref));
   }
 
   throw new Error('unable to choose suitable leaf');
 }
 
-function leastEnlargement(entries: Entry[], ref: LeafEntry): Entry {
+function leastEnlargement(entries: Node[], ref: Node): Node {
   let least = entries[0];
   let growth = Number.POSITIVE_INFINITY;
 

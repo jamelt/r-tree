@@ -1,12 +1,4 @@
-import { Entry, NULL_ENTRY } from './entry';
-import {
-  Node,
-  nodeAdd,
-  nodeClear,
-  nodeCreate,
-  nodeDeficit,
-  NULL_NODE
-} from './node';
+import { Node, nodeAdd, nodeClear, nodeCreate, nodeDeficit } from './node';
 import { Specification } from './specification';
 import { removeValue } from './utils';
 
@@ -18,7 +10,7 @@ export interface Split {
 
 export function splitCreate(splitting: Node): Split {
   const left = splitting;
-  const right = nodeCreate(splitting);
+  const right = nodeCreate();
   nodeClear(left);
   return {
     left: left,
@@ -28,35 +20,35 @@ export function splitCreate(splitting: Node): Split {
 }
 
 export interface Seeds {
-  left: Entry;
-  right: Entry;
+  left: Node;
+  right: Node;
 }
 
 export function seedsCreate(): Seeds {
   return {
-    left: NULL_ENTRY,
-    right: NULL_ENTRY
+    left: undefined,
+    right: undefined
   };
 }
 
 export interface SplitAssignment {
-  entry: Entry;
+  entry: Node;
   node: Node;
 }
 
 export function splitAssignmentCreate(): SplitAssignment {
-  return { entry: NULL_ENTRY, node: NULL_NODE };
+  return { entry: undefined, node: undefined };
 }
 
 export interface SplitAlgorithm {
-  pickNext(remaining: Entry[], split: Split): SplitAssignment;
-  pickSeeds(remaining: Entry[]): Seeds;
+  pickNext(remaining: Node[], split: Split): SplitAssignment;
+  pickSeeds(remaining: Node[]): Seeds;
 }
 
 export function splitNode(
   specification: Specification,
   node: Node,
-  entry: Entry
+  entry: Node
 ): Split {
   function needsRemaining(node: Node): boolean {
     return nodeDeficit(node, specification) >= remaining.length;

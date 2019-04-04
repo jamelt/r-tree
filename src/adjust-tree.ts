@@ -1,7 +1,5 @@
 // import { createDebugFn } from './debug';
-import { entryCreate, NULL_ENTRY } from './entry';
 import { Node, nodeAdd, nodeEntriesAvailable, nodeRegion } from './node';
-import { loadParentFn, Parent } from './parent';
 import { Path } from './path';
 import { regionEnlarge } from './region';
 import { Specification } from './specification';
@@ -23,37 +21,28 @@ export function adjustTree(
   node: Node,
   split?: Node
 ): RootAdjustment {
-  const loadParent = loadParentFn(path);
-
-  function parentEnlarge(): void {
-    if (parent.entry === NULL_ENTRY || parent.entry === undefined) return;
-    parent.entry.region = regionEnlarge(nodeRegion(node), parent.entry.region);
-  }
-
   function propagateSplit(): Node | undefined {
-    if (split === undefined) return;
+    if (split === undefined) return undefined;
 
-    const splitEntry = entryCreate(split, nodeRegion(split));
-
-    if (nodeEntriesAvailable(specification, parent.node)) {
-      nodeAdd(parent.node, splitEntry);
+    if (nodeEntriesAvailable(specification, parent)) {
+      nodeAdd(parent, split);
       return undefined;
     } else {
-      split = splitNode(specification, parent.node, splitEntry).right;
-      parentEnlarge();
+      split = splitNode(specification, parent, split).right;
+      regionEnlarge(parent.region, nodeRegion(node));
       return split;
     }
   }
 
   // const debug = createDebugFn(() => path.root());
 
-  let parent: Parent = loadParent();
-  // debug();
-  while (!path.isRoot(node)) {
-    parentEnlarge();
+  let parent: Node;
+
+  while (path.length()) {
+    parent = path.pop();
+    regionEnlarge(parent.region, nodeRegion(node));
     split = propagateSplit();
-    node = parent.node;
-    parent = loadParent();
+    node = parent;
     // debug();
   }
 

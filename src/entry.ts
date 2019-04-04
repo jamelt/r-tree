@@ -3,7 +3,7 @@ import { Node, nodeCreateNull, NULL_NODE } from './node';
 import { Region, regionCreate } from './region';
 
 export interface Entry {
-  child: Node;
+  id:
   region: Region;
 }
 

@@ -1,17 +1,9 @@
-import { Entry } from './entry';
-import { nodeRegion, Node } from './node';
+import { Node, nodeRegion } from './node';
 import { regionArea, regionEnlarge } from './region';
-import {
-  Seeds,
-  seedsCreate,
-  Split,
-  SplitAlgorithm,
-  SplitAssignment,
-  splitAssignmentCreate
-} from './split';
+import { Seeds, seedsCreate, Split, SplitAlgorithm, SplitAssignment, splitAssignmentCreate } from './split';
 
 export function quadraticSplitAlgorithm(): SplitAlgorithm {
-  function pickSeeds(remaining: Entry[]): Seeds {
+  function pickSeeds(remaining: Node[]): Seeds {
     let seeds = seedsCreate();
     let worst = Number.NEGATIVE_INFINITY;
 
@@ -35,7 +27,7 @@ export function quadraticSplitAlgorithm(): SplitAlgorithm {
     return seeds;
   }
 
-  function pickNext(remaining: Entry[], split: Split): SplitAssignment {
+  function pickNext(remaining: Node[], split: Split): SplitAssignment {
     const assignment = splitAssignmentCreate();
     const nodes = split.toArray();
     const other = (node: Node) => (node === nodes[0] ? nodes[1] : nodes[0]);

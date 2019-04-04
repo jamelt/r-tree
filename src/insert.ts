@@ -1,6 +1,5 @@
 import { adjustTree, RootAdjustment } from './adjust-tree';
 import { chooseLeaf } from './choose-leaf';
-import { entryCreate, LeafEntry } from './entry';
 import {
   Node,
   nodeAdd,
@@ -15,8 +14,10 @@ import { splitNode } from './split';
 export function insert(
   specification: Specification,
   node: Node,
-  entry: LeafEntry
+  entry: Node
 ): Node | void {
+  if (node === undefined) return entry;
+
   const path = pathCreate();
   const leaf = chooseLeaf(path, node, entry);
 
@@ -36,7 +37,8 @@ export function insert(
 function growTree(adjustment: RootAdjustment): Node | void {
   if (adjustment.split === undefined) return;
   const root = nodeCreate();
-  nodeAdd(root, entryCreate(adjustment.root, nodeRegion(adjustment.root)));
-  nodeAdd(root, entryCreate(adjustment.split, nodeRegion(adjustment.split)));
+  nodeAdd(root, adjustment.root);
+  nodeAdd(root, adjustment.split);
+  root.region = nodeRegion(root);
   return root;
 }

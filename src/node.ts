@@ -1,60 +1,45 @@
 import { Id } from './data-types';
-import { Entry, LeafEntry } from './entry';
 import { Region, regionCreate, regionEnlarge } from './region';
 import { Specification } from './specification';
 import { removeValue } from './utils';
 
-export const NULL_NODE: Node = Object.freeze({
-  entries: [],
-  leaf: false
-});
-
 export interface Node {
-  entries: Entry[];
-  leaf: boolean;
+  entries: Node[] | Id[];
+  region: Region;
+  leaf?: false;
 }
-
-export interface LeafNode extends Node {
-  entries: LeafEntry[];
+export interface LeafNode {
+  id: Id;
+  region: Region;
   leaf: true;
 }
 
-export function nodeCreateLeaf(): LeafNode {
+export function nodeCreate(region: Region): Node {
   return {
     entries: [],
+    region: region,
+  };
+}
+
+export function nodeCreateLeaf(id: Id, region: Region): LeafNode {
+  return {
+    id,
+    region,
     leaf: true
-  };
-}
-
-export function nodeCreate(template?: Node): Node {
-  if (template && template.leaf) {
-    return nodeCreateLeaf();
-  } else {
-    return {
-      entries: [],
-      leaf: false
-    };
   }
-}
-
-export function nodeCreateNull(): Node {
-  return {
-    entries: [],
-    leaf: false
-  };
 }
 
 export function nodeEntriesAvailable(specification: Specification, node: Node) {
   return node.entries.length < specification.maxEntries;
 }
 
-export function nodeAdd(node: Node, entry: Entry): Entry {
-  node.entries.push(entry);
+export function nodeAdd(node: Node, entry: Node): Node {
+  node.entries.push(node);
   return entry;
 }
 
-export function nodeRemove(node: Node, entry: Entry): Entry {
-  removeValue(node.entries, entry);
+export function nodeRemove(node: Node, entry: Node): Node {
+  removeValue(node.entries, node);
   return entry;
 }
 
@@ -78,7 +63,7 @@ export function nodeRegion(node: Node): Region {
   return region;
 }
 
-export function nodeFind(node: LeafNode, id: Id): LeafEntry | undefined {
+export function nodeFind(node: Node, id: Id): Node | undefined {
   for (let i = 0; i < node.entries.length; i++)
     if (node.entries[i].id === id) return node.entries[i];
   return undefined;

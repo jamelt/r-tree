@@ -1,5 +1,5 @@
 import { Id } from './data-types';
-import { Node, NULL_NODE } from './node';
+import { Node } from './node';
 import { Region, regionOverlaps } from './region';
 
 export function search(subtree: Node, region: Region): Id[] {
@@ -7,7 +7,7 @@ export function search(subtree: Node, region: Region): Id[] {
   const results: Id[] = [];
 
   while (processQueue.length > 0) {
-    const node = processQueue.shift() || NULL_NODE;
+    const node = processQueue.shift();
     const entries = node.entries;
 
     for (let i = 0; i < entries.length; i++) {
