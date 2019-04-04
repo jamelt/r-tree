@@ -15,12 +15,12 @@ test('search', () => {
 
   // debug();
 
-  results = rtree.search({ min: [3, 3], max: [10, 10] });
+  results = rtree.search({ minX: 3, minY: 3, maxX: 10, maxY: 10 });
   expect(results).toContain('a');
 
-  results = rtree.search({ min: [48, 48], max: [52, 52] });
+  results = rtree.search({ minX: 48, minY: 48, maxX: 52, maxY: 52 });
   expect(results).toContain('g');
 
-  results = rtree.search({ min: [0, 0], max: [100, 100] });
+  results = rtree.search({ minX: 0, minY: 0, maxX: 100, maxY: 100 });
   expect(results).toHaveLength(10);
 });

@@ -27,7 +27,7 @@ describe('insert', () => {
       rtree.insert(entry.id, entry.region);
     });
 
-    let results = rtree.search({ min: [0, 0], max: [range, range] });
+    let results = rtree.search({ minX: 0, minY: 0, maxX: range, maxY: range });
     expect(results).toHaveLength(stressCount);
   });
 });

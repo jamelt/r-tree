@@ -1,6 +1,6 @@
 import { Id } from './data-types';
 import { Entry, LeafEntry } from './entry';
-import { Region, regionEnlarge, regionCreate } from './region';
+import { Region, regionCreate, regionEnlarge } from './region';
 import { Specification } from './specification';
 import { removeValue } from './utils';
 
@@ -69,20 +69,17 @@ export function nodeClear(node: Node) {
 export function nodeRegion(node: Node): Region {
   let region: Region = regionCreate();
 
-  node.entries.forEach((entry, i) => {
-    region = i === 0 ? entry.region : region;
+  for (let i = 0; i < node.entries.length; i++) {
+    const entry = node.entries[i];
+    if (i === 0) region = entry.region;
     region = regionEnlarge(region, entry.region);
-  });
+  }
 
   return region;
 }
 
 export function nodeFind(node: LeafNode, id: Id): LeafEntry | undefined {
-  let found: LeafEntry | undefined;
-  node.entries.some((entry) => {
-    const matches = entry.id === id;
-    if (matches) found = entry;
-    return entry.id === id;
-  });
-  return found;
+  for (let i = 0; i < node.entries.length; i++)
+    if (node.entries[i].id === id) return node.entries[i];
+  return undefined;
 }

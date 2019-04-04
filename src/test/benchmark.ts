@@ -67,7 +67,12 @@ suite.add('r-tree > search', {
     dataEntries.forEach((entry) => rtree.insert(entry.id, entry.region));
   },
   fn() {
-    rtree.search({ min: [0,0], max: [range,range] });
+    rtree.search({
+      minX: 0,
+      minY: 0,
+      maxX: range,
+      maxY: range
+    });
   }
 });
 
