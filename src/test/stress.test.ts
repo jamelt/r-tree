@@ -1,7 +1,8 @@
+import * as RBush from 'rbush';
 import RTree from '../r-tree';
 import { DataEntry, generateDataEntry } from './data';
-import * as RBush from 'rbush';
 import { rbushEntry, RBushEntry } from './types';
+// @ts-ignore
 import Flatbush = require('flatbush');
 
 const stressCount: number = 100000;
@@ -13,7 +14,7 @@ let rtree = RTree();
 let rbush = RBush();
 let flatbush = new Flatbush(1);
 
-describe(`benchmark (${stressCount} items)`, () => {
+describe(`stress (${stressCount} items)`, () => {
   beforeAll(() => {
     for (let i = 0; i < stressCount; i++) {
       const entryRTree = generateDataEntry(2, range);
