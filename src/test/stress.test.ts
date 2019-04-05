@@ -28,17 +28,14 @@ describe(`stress (${stressCount} items)`, () => {
     flatbush = new Flatbush(stressCount);
   });
 
-  test('r-tree > insert', () => {
-    dataEntries.forEach((entry) => rtree.insert(entry.id, entry.region));
+  test('flatbush > insert', () => {
+    for (const entry of rbushEntries)
+      flatbush.add(entry.minX, entry.minY, entry.maxX, entry.maxY);
+    flatbush.finish();
   });
 
-  test('r-tree > search', () => {
-    const results = rtree.search({
-      minX: 0,
-      minY: 0,
-      maxX: range,
-      maxY: range
-    });
+  test('flatbush > search', () => {
+    const results = flatbush.search(0, 0, range, range);
     expect(results).toHaveLength(stressCount);
   });
 
@@ -56,14 +53,18 @@ describe(`stress (${stressCount} items)`, () => {
     expect(results).toHaveLength(stressCount);
   });
 
-  test('flatbush > insert', () => {
-    for (const entry of rbushEntries)
-      flatbush.add(entry.minX, entry.minY, entry.maxX, entry.maxY);
-    flatbush.finish();
+  test('r-tree > insert', () => {
+    dataEntries.forEach((entry) => rtree.insert(entry.id, entry.region));
   });
 
-  test('flatbush > search', () => {
-    const results = flatbush.search(0, 0, range, range);
+  test('r-tree > search', () => {
+    const results = rtree.search({
+      minX: 0,
+      minY: 0,
+      maxX: range,
+      maxY: range
+    });
     expect(results).toHaveLength(stressCount);
   });
+
 });
