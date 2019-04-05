@@ -1,6 +1,6 @@
 import { Id } from './data-types';
 import { Entry } from './entry';
-import { Region, regionClear, regionCopy, regionEnlargeAndSet, undefinedRegion } from './region';
+import { Region, regionClear, regionCopy, regionEnlargeAndSet, regionSet, undefinedRegion } from './region';
 import { Specification } from './specification';
 import { removeValue } from './utils';
 
@@ -63,6 +63,7 @@ export function nodeAdd<T extends Node | Entry>(node: Node, element: T): T {
 
 export function nodeRemove<T extends Node | Entry>(node: Node, entry: T): T {
   removeValue<Node | Entry>(node.entries, node);
+  regionSet(node, nodeRegion(node));
   return entry;
 }
 
