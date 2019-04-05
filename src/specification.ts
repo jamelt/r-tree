@@ -9,9 +9,10 @@ export interface Specification {
 }
 
 export function defaultSpec(): Specification {
+  const maxEntries = 5;
   return {
-    minEntries: 2,
-    maxEntries: 4,
+    minEntries: 0.4 * maxEntries,
+    maxEntries,
     algorithm: quadraticSplitAlgorithm()
   };
 }

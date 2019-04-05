@@ -7,7 +7,7 @@ import Flatbush = require('flatbush');
 
 
 const stressCount: number = 100000;
-const range = stressCount * 2;
+const range = stressCount * 5;
 const dataEntries: DataEntry[] = [];
 const rbushEntries: RBushEntry[] = [];
 

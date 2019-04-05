@@ -37,10 +37,10 @@ export function generateId(): Id {
 }
 
 export function generateRegion(range: number = 100): Region {
-  const minX = random(0, range - 2);
-  const maxX = random(minX + 1, range);
-  const minY = random(0, range - 2);
-  const maxY = random(minY + 1, range);
+  const minX = random(0, range);
+  const maxX = random(Math.min(minX + random(0, range / 100), range));
+  const minY = random(0, range);
+  const maxY = random(Math.min(minY + random(0, range / 100), range));
   return regionCreate(minX, minY, maxX, maxY);
 }
 /*
