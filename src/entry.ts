@@ -1,25 +1,7 @@
 import { Id } from './data-types';
-import { Node, nodeCreateNull, NULL_NODE } from './node';
-import { Region, regionCreate } from './region';
+import { Region } from './region';
 
-export interface Entry {
-  id:
-  region: Region;
-}
-
-export interface LeafEntry extends Entry {
+export interface Entry extends Region {
   id: Id;
-}
-
-export const NULL_ENTRY: Entry = Object.freeze({
-  region: regionCreate(),
-  child: nodeCreateNull()
-});
-
-export function entryCreateLeaf(id: Id, region: Region): LeafEntry {
-  return { id, region, child: NULL_NODE };
-}
-
-export function entryCreate(child: Node, region: Region): Entry {
-  return { child, region };
+  [propertyName: string]: any;
 }

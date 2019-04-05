@@ -1,45 +1,68 @@
 import { Id } from './data-types';
-import { Region, regionCreate, regionEnlarge } from './region';
+import { Entry } from './entry';
+import { Region, regionClear, regionCopy, regionEnlargeAndSet, undefinedRegion } from './region';
 import { Specification } from './specification';
 import { removeValue } from './utils';
 
-export interface Node {
-  entries: Node[] | Id[];
-  region: Region;
-  leaf?: false;
-}
-export interface LeafNode {
-  id: Id;
-  region: Region;
-  leaf: true;
+export interface Node extends Region {
+  entries: (Node | Entry)[];
+  leaf?: boolean;
 }
 
-export function nodeCreate(region: Region): Node {
+export function nodeCreate(leaf?: boolean): Node {
+  if (leaf) {
+    return {
+      entries: [],
+      leaf: true,
+      ...undefinedRegion
+    };
+  } else {
+    return {
+      entries: [],
+      ...undefinedRegion
+    };
+  }
+}
+
+export function nodeCreateBranch(region?: Region): Node {
+  if (!region) {
+    return nodeCreate();
+  }
   return {
     entries: [],
-    region: region,
+    minX: region.minX,
+    minY: region.minY,
+    maxX: region.maxX,
+    maxY: region.maxY
   };
 }
 
-export function nodeCreateLeaf(id: Id, region: Region): LeafNode {
-  return {
-    id,
-    region,
-    leaf: true
+export function nodeCreateLeaf(region?: Region): Node {
+  if (!region) {
+    return nodeCreate(true);
   }
+  return {
+    entries: [],
+    minX: region.minX,
+    minY: region.minY,
+    maxX: region.maxX,
+    maxY: region.maxY,
+    leaf: true
+  };
 }
 
 export function nodeEntriesAvailable(specification: Specification, node: Node) {
   return node.entries.length < specification.maxEntries;
 }
 
-export function nodeAdd(node: Node, entry: Node): Node {
-  node.entries.push(node);
-  return entry;
+export function nodeAdd<T extends Node | Entry>(node: Node, element: T): T {
+  node.entries.push(element);
+  regionEnlargeAndSet(node, element);
+  return element;
 }
 
-export function nodeRemove(node: Node, entry: Node): Node {
-  removeValue(node.entries, node);
+export function nodeRemove<T extends Node | Entry>(node: Node, entry: T): T {
+  removeValue<Node | Entry>(node.entries, node);
   return entry;
 }
 
@@ -47,24 +70,26 @@ export function nodeDeficit(node: Node, specification: Specification) {
   return specification.minEntries - node.entries.length;
 }
 
-export function nodeClear(node: Node) {
+export function nodeClear(node: Node): Node {
   node.entries.splice(0);
+  regionClear(node);
+  return node;
 }
 
 export function nodeRegion(node: Node): Region {
-  let region: Region = regionCreate();
+  if (!node.entries.length) throw new Error('no entries to get region of');
 
-  for (let i = 0; i < node.entries.length; i++) {
-    const entry = node.entries[i];
-    if (i === 0) region = entry.region;
-    region = regionEnlarge(region, entry.region);
-  }
+  let region = regionCopy(node.entries[0]);
+
+  for (let i = 1; i < node.entries.length; i++)
+    regionEnlargeAndSet(region, node.entries[i]);
 
   return region;
 }
 
 export function nodeFind(node: Node, id: Id): Node | undefined {
-  for (let i = 0; i < node.entries.length; i++)
-    if (node.entries[i].id === id) return node.entries[i];
+  // TODO
+  // for (let i = 0; i < node.entries.length; i++)
+  // if (node.entries[i].id === id) return node.entries[i];
   return undefined;
 }

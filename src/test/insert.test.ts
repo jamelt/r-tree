@@ -1,31 +1,31 @@
 import RTree from '../r-tree';
 import { data, DataEntry, generateDataEntry } from './data';
 
-const stressCount: number = 10000;
-const range = stressCount * 10;
+const stressCount: number = 100;
+const range = stressCount * 2;
 const entries: DataEntry[] = [];
 
 describe('insert', () => {
+  let rtree = RTree();
+
   beforeAll(() => {
     for (let i = 0; i < stressCount; i++)
-      entries.push(generateDataEntry(2, range));
+      entries.push(generateDataEntry(range));
   });
 
   test('stock', () => {
-    const rtree = RTree({ minEntries: 1, maxEntries: 2 });
+    rtree = RTree({ minEntries: 3, maxEntries: 6 });
 
     Object.keys(data).forEach((key) => {
       const entry = data[key];
-      rtree.insert(entry.id, entry.region);
+      rtree.insert(entry);
     });
   });
 
   test('bulk', () => {
-    const rtree = RTree({ minEntries: 5, maxEntries: 9 });
+    rtree = RTree({ minEntries: 5, maxEntries: 9 });
 
-    entries.forEach((entry, i) => {
-      rtree.insert(entry.id, entry.region);
-    });
+    entries.forEach((entry) => rtree.insert(entry));
 
     let results = rtree.search({ minX: 0, minY: 0, maxX: range, maxY: range });
     expect(results).toHaveLength(stressCount);

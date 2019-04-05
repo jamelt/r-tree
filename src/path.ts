@@ -1,7 +1,6 @@
 import { Node } from './node';
 import { mixinDeep } from './utils';
 
-
 export interface Path {
   push(node: Node): Path;
   pop(): Node;
@@ -13,15 +12,15 @@ export interface Path {
 
 export function pathCreate(): Path {
   let sequence: Node[] = [];
-  let currentIndex = -1;
   let pathRoot: Node | undefined;
+  let currentIndex = -1;
 
   const instance = {};
 
   function push(node: Node): Path {
     sequence.push(node);
     currentIndex += 1;
-    if (currentIndex === 0) pathRoot = <Node>node;
+    if (currentIndex === 0) pathRoot = node;
     return <Path>instance;
   }
 
@@ -31,8 +30,7 @@ export function pathCreate(): Path {
   }
 
   function value(index?: number): Node | undefined {
-    if (index === undefined) return sequence[currentIndex];
-    return sequence[index];
+    return index === undefined ? sequence[currentIndex] : sequence[index];
   }
 
   function isRoot(node: Node) {

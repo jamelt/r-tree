@@ -58,6 +58,7 @@
 // }
 
 import { Id } from './data-types';
+import { Entry } from './entry';
 import { Node } from './node';
 import { Path } from './path';
 import { Region, regionOverlaps } from './region';
@@ -83,7 +84,7 @@ export function findLeaf(
 
 function findEntry(leaf: Node, id: Id, result: FindLeafResult) {
   leaf.entries.some((entry) => {
-    if (id === entry.id) result.leaf = leaf;
+    if (id === (<Entry>entry).id) result.leaf = leaf;
     return result.leaf !== undefined;
   });
 }
@@ -96,9 +97,9 @@ function findNode(
   result: FindLeafResult
 ) {
   node.entries.some((entry) => {
-    if (regionOverlaps(entry.region, region)) {
-      path.push(entry);
-      findLeaf(path, entry, id, region, result);
+    if (regionOverlaps(entry, region)) {
+      path.push(<Node>entry);
+      findLeaf(path, <Node>entry, id, region, result);
     }
     return result.leaf !== undefined;
   });

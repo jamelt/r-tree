@@ -1,4 +1,5 @@
 import { Id } from './data-types';
+import { Entry } from './entry';
 import { Node } from './node';
 import { Region, regionOverlaps } from './region';
 
@@ -6,19 +7,22 @@ export function search(subtree: Node, region: Region): Id[] {
   const processQueue: Node[] = [subtree];
   const results: Id[] = [];
 
-  while (processQueue.length > 0) {
-    const node = processQueue.shift();
-    const entries = node.entries;
+  let node: Node | undefined;
+  let entries: (Node | Entry)[];
+  let entry: Node | Entry;
+
+  while ((node = processQueue.shift())) {
+    entries = node.entries;
 
     for (let i = 0; i < entries.length; i++) {
-      const entry: any = entries[i];
+      entry = entries[i];
 
-      if (!regionOverlaps(entry.region, region)) continue;
+      if (!regionOverlaps(entry, region)) continue;
 
-      if (entry.id) {
-        results.push(entry.id);
+      if ((<any>entry).id) {
+        results.push(entry);
       } else {
-        processQueue.push(entry.child);
+        processQueue.push(<Node>entry);
       }
     }
   }

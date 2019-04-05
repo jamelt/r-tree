@@ -18,7 +18,7 @@ export function remove(
   const path = pathCreate();
   const { leaf } = findLeaf(path, node, id, region, {});
   if (leaf === undefined) return;
-  nodeRemove(node, nodeFind(leaf, id));
+  nodeRemove(node, <Node>nodeFind(leaf, id));
   condenseTree(rtree, specification, path, leaf);
   rtree.condense();
 }
