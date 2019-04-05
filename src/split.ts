@@ -1,71 +1,51 @@
-import { Entry, NULL_ENTRY } from './entry';
-import {
-  Node,
-  nodeAdd,
-  nodeClear,
-  nodeCreate,
-  nodeDeficit,
-  NULL_NODE
-} from './node';
+import { Entry } from './entry';
+import { Node, nodeAdd, nodeClear, nodeCreate, nodeDeficit } from './node';
+import { regionSet, undefinedRegion } from './region';
 import { Specification } from './specification';
 import { removeValue } from './utils';
 
 export interface Split {
   left: Node;
   right: Node;
-  toArray(): Node[];
-}
-
-export function splitCreate(splitting: Node): Split {
-  const left = splitting;
-  const right = nodeCreate(splitting);
-  nodeClear(left);
-  return {
-    left: left,
-    right: right,
-    toArray: () => [left, right]
-  };
+  array: Node[];
 }
 
 export interface Seeds {
-  left: Entry;
-  right: Entry;
-}
-
-export function seedsCreate(): Seeds {
-  return {
-    left: NULL_ENTRY,
-    right: NULL_ENTRY
-  };
+  left: Node | Entry;
+  right: Node | Entry;
+  array: (Node | Entry)[];
 }
 
 export interface SplitAssignment {
-  entry: Entry;
   node: Node;
-}
-
-export function splitAssignmentCreate(): SplitAssignment {
-  return { entry: NULL_ENTRY, node: NULL_NODE };
+  entry: Node | Entry;
 }
 
 export interface SplitAlgorithm {
-  pickNext(remaining: Entry[], split: Split): SplitAssignment;
-  pickSeeds(remaining: Entry[]): Seeds;
+  pickNext<T extends Node | Entry>(remaining: T[], split: Split): SplitAssignment;
+  pickSeeds<T extends Node | Entry>(remaining: T[]): Seeds;
 }
 
-export function splitNode(
-  specification: Specification,
-  node: Node,
-  entry: Entry
-): Split {
+export function splitCreate(splitting: Node): Split {
+  const left = nodeClear(splitting);
+  regionSet(left, undefinedRegion);
+  const right = nodeCreate(Boolean(splitting.leaf));
+
+  return { left, right, array: [left, right] };
+}
+
+export function splitNode(specification: Specification, node: Node, entry: Node | Entry): Split {
   function needsRemaining(node: Node): boolean {
     return nodeDeficit(node, specification) >= remaining.length;
   }
 
   function assignSeeds(): void {
     const seeds = algorithm.pickSeeds(remaining);
-    removeValue(remaining, nodeAdd(split.left, seeds.left));
-    removeValue(remaining, nodeAdd(split.right, seeds.right));
+    for (let i = 0; i < split.array.length; i++) {
+      nodeAdd(split.array[i], seeds.array[i]);
+      regionSet(split.array[i], seeds.array[i]);
+      removeValue(remaining, seeds.array[i]);
+    }
   }
 
   function addRemaining(node: Node) {
@@ -73,7 +53,7 @@ export function splitNode(
   }
 
   function fillRemaining(): boolean {
-    return split.toArray().reduce((filled: boolean, node: Node) => {
+    return split.array.reduce((filled: boolean, node: Node) => {
       if (filled) return true;
       if (!needsRemaining(node)) return false;
       addRemaining(node);

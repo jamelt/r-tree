@@ -18,7 +18,7 @@ function populate() {
   dataEntries.slice(0);
   rbushEntries.slice(0);
   for (let i = 0; i < stressCount; i++) {
-    const entryRTree = generateDataEntry(2, range);
+    const entryRTree = generateDataEntry(range);
     const entryRBush = rbushEntry(entryRTree);
     dataEntries.push(entryRTree);
     rbushEntries.push(entryRBush);
@@ -57,14 +57,14 @@ suite.add('r-tree > insert', {
   },
   fn: () => {
     const entry = <DataEntry>dataEntries.shift();
-    return rtree.insert(entry.id, entry.region);
+    return rtree.insert(entry);
   }
 });
 suite.add('r-tree > search', {
   onStart() {
     populate();
     createRTree();
-    dataEntries.forEach((entry) => rtree.insert(entry.id, entry.region));
+    dataEntries.forEach((entry) => rtree.insert(entry));
   },
   fn() {
     rtree.search({

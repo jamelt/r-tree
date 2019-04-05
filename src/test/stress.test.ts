@@ -18,7 +18,7 @@ let flatbush = new Flatbush(1);
 describe(`stress (${stressCount} items)`, () => {
   beforeAll(() => {
     for (let i = 0; i < stressCount; i++) {
-      const entryRTree = generateDataEntry(2, range);
+      const entryRTree = generateDataEntry(range);
       const entryRBush = rbushEntry(entryRTree);
       dataEntries.push(entryRTree);
       rbushEntries.push(entryRBush);
@@ -55,7 +55,7 @@ describe(`stress (${stressCount} items)`, () => {
   });
 
   test('r-tree > insert', () => {
-    dataEntries.forEach((entry) => rtree.insert(entry.id, entry.region));
+    dataEntries.forEach((entry) => rtree.insert(entry));
   });
 
   test('r-tree > search', () => {

@@ -1,51 +1,45 @@
-import { Entry, LeafEntry } from './entry';
-import { LeafNode, Node, NULL_NODE } from './node';
+import { Entry } from './entry';
+import { Node } from './node';
 import { Path } from './path';
 import { regionArea, regionEnlarge } from './region';
-import { error } from './utils';
 
-export function chooseLeaf(
-  path: Path,
-  subtree: Node,
-  ref: LeafEntry
-): LeafNode {
+export function chooseLeaf(path: Path, subtree: Node, ref: Entry): Node {
   const processQueue: Node[] = [subtree];
 
-  while (processQueue.length > 0) {
-    const node = processQueue.shift() || NULL_NODE;
+  let node: Node | undefined;
+  let child: Node;
 
+  while ((node = processQueue.shift())) {
     path.push(node);
 
-    if (node.leaf) return <LeafNode>node;
+    if (node.leaf) return node;
 
-    const entry = leastEnlargement(node.entries, ref);
+    child = leastEnlargement(node.entries, ref);
 
-    path.push(entry);
-
-    if (!entry.child) throw error('entry missing child');
-
-    processQueue.push(entry.child);
+    processQueue.push(child);
   }
 
   throw new Error('unable to choose suitable leaf');
 }
 
-function leastEnlargement(entries: Entry[], ref: LeafEntry): Entry {
+function leastEnlargement(entries: (Node | Entry)[], ref: Entry): Node {
   let least = entries[0];
-  let growth = Number.POSITIVE_INFINITY;
+  let growth = Infinity;
 
   for (let i = 0; i < entries.length; i++) {
     const entry = entries[i];
-    const combined = regionArea(regionEnlarge(ref.region, entry.region));
-    const diff = regionArea(ref.region) - combined;
+    const combined = regionArea(regionEnlarge(ref, entry));
+    const diff = regionArea(ref) - combined;
 
     if (diff < growth) {
       growth = diff;
       least = entry;
     } else if (diff === growth) {
-      if (combined < regionArea(least.region)) least = entry;
+      if (combined < regionArea(least)) {
+        least = entry;
+      }
     }
   }
 
-  return least;
+  return <Node> least;
 }

@@ -1,9 +1,6 @@
-// import { createDebugFn } from './debug';
-import { entryCreate, NULL_ENTRY } from './entry';
-import { Node, nodeAdd, nodeEntriesAvailable, nodeRegion } from './node';
-import { loadParentFn, Parent } from './parent';
+import { Node, nodeAdd, nodeEntriesAvailable } from './node';
 import { Path } from './path';
-import { regionEnlarge } from './region';
+import { regionEnlargeAndSet } from './region';
 import { Specification } from './specification';
 
 import { splitNode } from './split';
@@ -17,44 +14,27 @@ function rootAdjustmentCreate(root: Node, split?: Node) {
   return { root, split };
 }
 
-export function adjustTree(
-  specification: Specification,
-  path: Path,
-  node: Node,
-  split?: Node
-): RootAdjustment {
-  const loadParent = loadParentFn(path);
-
-  function parentEnlarge(): void {
-    if (parent.entry === NULL_ENTRY || parent.entry === undefined) return;
-    parent.entry.region = regionEnlarge(nodeRegion(node), parent.entry.region);
-  }
-
+export function adjustTree(specification: Specification, path: Path, node: Node, split?: Node): RootAdjustment {
   function propagateSplit(): Node | undefined {
     if (split === undefined) return;
 
-    const splitEntry = entryCreate(split, nodeRegion(split));
-
-    if (nodeEntriesAvailable(specification, parent.node)) {
-      nodeAdd(parent.node, splitEntry);
+    if (nodeEntriesAvailable(specification, parent)) {
+      nodeAdd(parent, split);
       return undefined;
     } else {
-      split = splitNode(specification, parent.node, splitEntry).right;
-      parentEnlarge();
+      split = splitNode(specification, parent, split).right;
+      regionEnlargeAndSet(parent, node);
       return split;
     }
   }
 
-  // const debug = createDebugFn(() => path.root());
+  let parent: Node;
 
-  let parent: Parent = loadParent();
-  // debug();
   while (!path.isRoot(node)) {
-    parentEnlarge();
+    parent = path.pop();
+    regionEnlargeAndSet(parent, node);
     split = propagateSplit();
-    node = parent.node;
-    parent = loadParent();
-    // debug();
+    node = parent;
   }
 
   return rootAdjustmentCreate(node, split);

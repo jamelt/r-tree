@@ -1,7 +1,8 @@
-import { loadParentFn } from './parent';
-import { LeafNode, Node, nodeDeficit, nodeRegion, nodeRemove } from './node';
+import { Entry } from './entry';
+import { Node, nodeDeficit, nodeRegion, nodeRemove } from './node';
 import { Path } from './path';
 import { RTree } from './r-tree';
+import { Region, regionSet } from './region';
 import { Specification } from './specification';
 import { removeValue } from './utils';
 
@@ -12,17 +13,16 @@ export function condenseTree(
   node: Node
 ) {
   const orphans: Node[] = [];
-  const loadParent = loadParentFn(path);
 
   while (!path.isRoot(node)) {
-    const parent = loadParent();
+    const parent = path.pop();
 
     if (nodeDeficit(node, specification)) {
-      nodeRemove(parent.node, parent.entry);
+      nodeRemove(parent, node);
       orphans.push(node);
     } else {
-      parent.entry.region = nodeRegion(node);
-      node = parent.node;
+      regionSet(parent, <Region>nodeRegion(node));
+      node = parent;
     }
   }
 
@@ -32,9 +32,9 @@ export function condenseTree(
     .filter((node) => node.leaf)
     .forEach((node) => {
       removeValue(branchNodes, node);
-      const leaf = <LeafNode>node;
+      const leaf = node;
       leaf.entries.forEach((entry) => {
-        rtree.insert(entry.id, entry.region);
+        rtree.insert(<Entry>entry);
       });
     });
 
