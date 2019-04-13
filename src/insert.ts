@@ -1,5 +1,5 @@
 import { adjustTree, RootAdjustment } from './adjust-tree';
-import { RChooseLeaf } from './r-choose-leaf';
+import { chooseLeaf } from './r-choose-leaf';
 import { Entry } from './entry';
 import { Node, nodeAdd, nodeCreateBranch, nodeEntriesAvailable } from './node';
 import { pathCreate } from './path';
@@ -12,7 +12,7 @@ export function insert(
   entry: Entry
 ): Node | void {
   const path = pathCreate();
-  const leaf = RChooseLeaf(path, node, entry);
+  const leaf = chooseLeaf(path, node, entry);
 
   let adjustment: RootAdjustment;
 

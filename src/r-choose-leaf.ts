@@ -3,7 +3,7 @@ import { Node } from './node';
 import { Path } from './path';
 import { regionArea, regionEnlarge } from './region';
 
-export function RChooseLeaf(path: Path, subtree: Node, ref: Entry): Node {
+export function chooseLeaf(path: Path, subtree: Node, ref: Entry): Node {
   const processQueue: Node[] = [subtree];
 
   let node: Node | undefined;
